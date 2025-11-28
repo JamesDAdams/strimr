@@ -9,7 +9,7 @@ struct ContentView: View {
             
             switch sessionCoordinator.status {
             case .hydrating:
-                ProgressView("Loading…")
+                ProgressView("loading")
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .signedOut:
@@ -17,11 +17,10 @@ struct ContentView: View {
             case .needsServerSelection:
                 SelectServerView(sessionCoordinator: sessionCoordinator)
             case .ready:
-                Text("App ready placeholder")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
+                MainTabView()
         }
     }
+}
 }
 
 #Preview {

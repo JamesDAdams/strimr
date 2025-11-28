@@ -1,11 +1,29 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "App ready placeholder" : {
+    "0:00" : {
 
     },
-    "Loading…" : {
+    "Artwork" : {
+
+    },
+    "Featured" : {
+
+    },
+    "Home" : {
+
+    },
+    "Library" : {
+
+    },
+    "loading" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13,6 +31,30 @@
           }
         }
       }
+    },
+    "N/A" : {
+
+    },
+    "Now Playing" : {
+
+    },
+    "Overview" : {
+
+    },
+    "Play" : {
+
+    },
+    "Player" : {
+
+    },
+    "Player Surface" : {
+
+    },
+    "Search" : {
+
+    },
+    "Search library" : {
+
     },
     "serverSelection.connection.localFormat %@" : {
       "extractionState" : "manual",
@@ -282,6 +324,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se connecter avec Plex"
+          }
+        }
+      }
+    },
+    "tabs.home" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accueil"
+          }
+        }
+      }
+    },
+    "tabs.libraries" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libraries"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Bibliothèques"
+          }
+        }
+      }
+    },
+    "tabs.search" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche"
           }
         }
       }
