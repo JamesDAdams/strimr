@@ -3,7 +3,7 @@ import AuthenticationServices
 import UIKit
 
 struct SignInView: View {
-    @EnvironmentObject private var sessionStore: SessionStore
+    @EnvironmentObject private var sessionCoordinator: SessionCoordinator
 
     @State private var isAuthenticating = false
     @State private var errorMessage: String?
@@ -91,7 +91,7 @@ extension SignInView {
 
     @MainActor
     private func startSignIn() async {
-        guard let cloudAPI = sessionStore.cloudAPI else {
+        guard let cloudAPI = sessionCoordinator.cloudAPI else {
             errorMessage = String(localized: "signIn.error.notReady", bundle: .main)
             return
         }
@@ -158,13 +158,13 @@ extension SignInView {
         pollTask?.cancel()
 
         pollTask = Task {
-            guard let cloudAPI = sessionStore.cloudAPI else { return }
+            guard let cloudAPI = sessionCoordinator.cloudAPI else { return }
 
             while !Task.isCancelled && isAuthenticating {
                 do {
                     let result = try await cloudAPI.pollToken(pinId: pinID)
                     if let token = result.authToken {
-                        await sessionStore.signIn(with: token)
+                        await sessionCoordinator.signIn(with: token)
                         cancelSignIn()
                         return
                     }

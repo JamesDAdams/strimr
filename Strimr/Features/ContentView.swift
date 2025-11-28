@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var sessionStore: SessionStore
+    @EnvironmentObject private var sessionCoordinator: SessionCoordinator
 
     var body: some View {
         ZStack {
             Color("Background").ignoresSafeArea()
 
-            switch sessionStore.status {
+            switch sessionCoordinator.status {
             case .hydrating:
                 ProgressView("Loading…")
                     .progressViewStyle(.circular)
@@ -27,5 +27,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(SessionStore())
+        .environmentObject(SessionCoordinator())
 }

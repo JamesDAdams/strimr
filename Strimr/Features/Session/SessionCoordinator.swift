@@ -1,9 +1,9 @@
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 @MainActor
-final class SessionStore: ObservableObject {
+final class SessionCoordinator: ObservableObject {
     enum Status {
         case hydrating
         case signedOut
@@ -19,7 +19,7 @@ final class SessionStore: ObservableObject {
     @Published private(set) var mediaServerAPI: PlexMediaServerAPI?
     @Published private(set) var clientIdentifier: String = ""
 
-    private let keychain = KeychainStorage(service: "dev.strimr.app")
+    private let keychain = Keychain(service: "dev.strimr.app")
     private let tokenKey = "strimr.plex.authToken"
     private let clientIdKey = "strimr.plex.clientId"
     private let serverIdDefaultsKey = "strimr.plex.serverIdentifier"

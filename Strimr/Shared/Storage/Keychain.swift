@@ -1,12 +1,12 @@
 import Foundation
 import Security
 
-enum KeychainStorageError: Error {
+enum KeychainError: Error {
     case unexpectedStatus(OSStatus)
     case invalidItem
 }
 
-struct KeychainStorage {
+struct Keychain {
     private let service: String
 
     init(service: String) {
@@ -25,7 +25,7 @@ struct KeychainStorage {
         let attributes: [String: Any] = query.merging([kSecValueData as String: data]) { $1 }
         let status = SecItemAdd(attributes as CFDictionary, nil)
         guard status == errSecSuccess else {
-            throw KeychainStorageError.unexpectedStatus(status)
+            throw KeychainError.unexpectedStatus(status)
         }
     }
 
@@ -44,10 +44,10 @@ struct KeychainStorage {
             return nil
         }
         guard status == errSecSuccess else {
-            throw KeychainStorageError.unexpectedStatus(status)
+            throw KeychainError.unexpectedStatus(status)
         }
         guard let data = item as? Data, let string = String(data: data, encoding: .utf8) else {
-            throw KeychainStorageError.invalidItem
+            throw KeychainError.invalidItem
         }
         return string
     }
@@ -60,7 +60,7 @@ struct KeychainStorage {
         ]
         let status = SecItemDelete(query as CFDictionary)
         guard status == errSecSuccess || status == errSecItemNotFound else {
-            throw KeychainStorageError.unexpectedStatus(status)
+            throw KeychainError.unexpectedStatus(status)
         }
     }
 }

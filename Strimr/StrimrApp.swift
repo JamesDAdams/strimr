@@ -2,12 +2,12 @@ import SwiftUI
 
 @main
 struct StrimrApp: App {
-    @StateObject private var sessionStore = SessionStore()
+    @StateObject private var sessionCoordinator = SessionCoordinator()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(sessionStore)
+                .environmentObject(sessionCoordinator)
                 .preferredColorScheme(.dark)
         }
     }
