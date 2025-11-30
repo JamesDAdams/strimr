@@ -1,15 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "0:00" : {
-
-    },
-    "Artwork" : {
-
-    },
-    "Featured" : {
-
-    },
     "Home" : {
 
     },
@@ -32,28 +23,78 @@
         }
       }
     },
-    "N/A" : {
+    "Loading home" : {
 
     },
-    "Now Playing" : {
+    "Media Detail" : {
 
     },
-    "Overview" : {
+    "media.labels.seasonEpisode %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S%1$lld · E%2$lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S%1$lld · E%2$lld"
+          }
+        }
+      }
+    },
+    "media.labels.seasonsCount %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld season"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld seasons"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld saison"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld saisons"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "No artwork" : {
 
     },
-    "Play" : {
+    "Nothing to show yet." : {
 
     },
     "Player" : {
 
     },
-    "Player Surface" : {
-
-    },
     "Search" : {
-
-    },
-    "Search library" : {
 
     },
     "serverSelection.connection.localFormat %@" : {
@@ -354,7 +395,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Bibliothèques"
           }
         }

@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 
+@MainActor
 @Observable
 final class ServerSelectionViewModel {
     var servers: [PlexCloudResource] = []

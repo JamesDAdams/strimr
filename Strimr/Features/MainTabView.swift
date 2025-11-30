@@ -18,10 +18,7 @@ struct MainTabView: View {
             .tag(MainCoordinator.Tab.home)
 
             NavigationStack(path: coordinator.pathBinding(for: .search)) {
-                SearchView(
-                    viewModel: SearchViewModel(),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
+                SearchView()
                 .navigationDestination(for: MainCoordinator.Route.self) { route in
                     destination(for: route)
                 }
@@ -30,10 +27,7 @@ struct MainTabView: View {
             .tag(MainCoordinator.Tab.search)
 
             NavigationStack(path: coordinator.pathBinding(for: .library)) {
-                LibraryView(
-                    viewModel: LibraryViewModel(),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
+                LibraryView()
                 .navigationDestination(for: MainCoordinator.Route.self) { route in
                     destination(for: route)
                 }
@@ -45,10 +39,7 @@ struct MainTabView: View {
         .tabViewStyle(.sidebarAdaptable)
         .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
             if let media = coordinator.selectedMedia {
-                PlayerView(
-                    viewModel: PlayerViewModel(media: media),
-                    onClose: coordinator.resetPlayer
-                )
+                PlayerView()
             }
         }
     }
@@ -56,11 +47,8 @@ struct MainTabView: View {
     @ViewBuilder
     private func destination(for route: MainCoordinator.Route) -> some View {
         switch route {
-        case .mediaDetail(let media):
-            MediaDetailView(
-                viewModel: MediaDetailViewModel(media: media),
-                onPlay: coordinator.showPlayer(for:)
-            )
+        case .mediaDetail:
+            MediaDetailView()
         }
     }
 }
