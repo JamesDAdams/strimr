@@ -16,12 +16,7 @@ struct LibraryView: View {
         List {
             Section {
                 ForEach(viewModel.libraries) { library in
-                    NavigationLink {
-                        LibraryDetailView(
-                            library: library,
-                            onSelectMedia: onSelectMedia
-                        )
-                    } label: {
+                    NavigationLink(value: library) {
                         ZStack(alignment: .bottomLeading) {
                             if let artwork = viewModel.artworkURL(for: library) {
                                 AsyncImage(url: artwork) { phase in

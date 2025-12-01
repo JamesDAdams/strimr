@@ -38,6 +38,12 @@ struct MainTabView: View {
                     viewModel: libraryViewModel,
                     onSelectMedia: coordinator.showMediaDetail
                 )
+                .navigationDestination(for: Library.self) { library in
+                    LibraryDetailView(
+                        library: library,
+                        onSelectMedia: coordinator.showMediaDetail
+                    )
+                }
                     .navigationDestination(for: MainCoordinator.Route.self) { route in
                         destination(for: route)
                     }

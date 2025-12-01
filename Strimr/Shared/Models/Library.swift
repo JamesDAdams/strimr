@@ -1,6 +1,6 @@
 import Foundation
 
-struct Library: Identifiable, Equatable {
+struct Library: Identifiable, Equatable, Hashable {
     let id: String
     let title: String
     let type: PlexItemType
