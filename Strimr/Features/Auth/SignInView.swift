@@ -1,3 +1,4 @@
+#if os(iOS) || os(macOS)
 import AuthenticationServices
 import SwiftUI
 import UIKit
@@ -204,3 +205,4 @@ private final class WebAuthenticationPresentationContextProvider: NSObject, ASWe
         return ASPresentationAnchor()
     }
 }
+#endif

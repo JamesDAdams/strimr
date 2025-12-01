@@ -14,7 +14,11 @@ struct ContentView: View {
                     .progressViewStyle(.circular)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             case .signedOut:
+#if os(tvOS)
+                SignInTVView()
+#else
                 SignInView()
+#endif
             case .needsServerSelection:
                 SelectServerView(
                     viewModel: ServerSelectionViewModel(

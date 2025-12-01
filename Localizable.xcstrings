@@ -320,6 +320,23 @@
         }
       }
     },
+    "signIn.button.refresh" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh code"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiser le code"
+          }
+        }
+      }
+    },
     "signIn.button.waiting" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -401,6 +418,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se connecter avec Plex"
+          }
+        }
+      }
+    },
+    "signIn.tv.codeLabel %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code : %@"
+          }
+        }
+      }
+    },
+    "signIn.tv.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan this QR code with your phone to sign in to Plex."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scannez ce code QR avec votre téléphone pour vous connecter à Plex."
           }
         }
       }
