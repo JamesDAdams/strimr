@@ -11,7 +11,7 @@ final class SessionManager {
         case ready
     }
 
-    private let plexApi: PlexAPIManager
+    @ObservationIgnored private let plexApi: PlexAPIManager
 
     private(set) var status: Status = .hydrating
     private(set) var authToken: String?

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MediaCard: View {
+    @Environment(PlexAPIManager.self) private var plexApi
+
     enum Layout {
         case landscape
         case portrait
@@ -17,7 +19,7 @@ struct MediaCard: View {
 
     let layout: Layout
     let media: MediaItem
-    let imageURL: URL?
+    let artworkKind: MediaImageViewModel.ArtworkKind
     let onTap: () -> Void
 
     private var progress: Double? {
@@ -27,8 +29,16 @@ struct MediaCard: View {
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 8) {
-                MediaImageView(url: imageURL, aspectRatio: layout.aspectRatio)
+                MediaImageView(
+                    viewModel: MediaImageViewModel(
+                        plexApi: plexApi,
+                        artworkKind: artworkKind,
+                        media: media
+                    )
+                )
                     .frame(maxWidth: .infinity)
+                    .aspectRatio(layout.aspectRatio, contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                     .overlay(alignment: .bottomLeading) {
                         if let progress {
                             ProgressView(value: progress)
@@ -40,11 +50,17 @@ struct MediaCard: View {
                     }
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(media.title)
+                    Text(media.primaryLabel)
                         .font(.headline)
                         .lineLimit(1)
-                    if let subtitle = subtitle(for: media) {
-                        Text(subtitle)
+                    if let secondaryLabel = media.secondaryLabel {
+                        Text(secondaryLabel)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                    if let tertiaryLabel = media.tertiaryLabel {
+                        Text(tertiaryLabel)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
@@ -53,12 +69,5 @@ struct MediaCard: View {
             }
         }
         .buttonStyle(.plain)
-    }
-
-    private func subtitle(for media: MediaItem) -> String? {
-        if media.primaryLabel != media.title {
-            return media.primaryLabel
-        }
-        return media.secondaryLabel
     }
 }

@@ -5,6 +5,11 @@ struct PortraitMediaCard: View {
     let onTap: () -> Void
 
     var body: some View {
-        MediaCard(layout: .portrait, media: media, imageURL: imageURL, onTap: onTap)
+        MediaCard(
+            layout: .portrait,
+            media: media,
+            artworkKind: .thumb,
+            onTap: onTap
+        )
     }
 }

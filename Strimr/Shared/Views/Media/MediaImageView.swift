@@ -1,26 +1,11 @@
 import SwiftUI
 
 struct MediaImageView: View {
-    let url: URL?
-    let aspectRatio: CGFloat
+    @State var viewModel: MediaImageViewModel
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(.secondarySystemBackground))
-                .aspectRatio(aspectRatio, contentMode: .fit)
-                .overlay {
-                    VStack {
-                        Image(systemName: "film")
-                            .font(.title2)
-                            .foregroundStyle(.secondary)
-                        Text("No artwork")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-            if let url {
+        Group {
+            if let url = viewModel.imageURL {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
@@ -30,22 +15,30 @@ struct MediaImageView: View {
                         image
                             .resizable()
                             .scaledToFill()
-                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                     case .failure:
-                        Image(systemName: "photo")
-                            .font(.title2)
-                            .foregroundStyle(.secondary)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .fill(Color(.secondarySystemBackground))
-                            )
+                        placeholder
                     @unknown default:
                         EmptyView()
                     }
                 }
-                .aspectRatio(aspectRatio, contentMode: .fill)
+            } else {
+                placeholder
             }
         }
+        .task {
+            await viewModel.load()
+        }
+    }
+
+    private var placeholder: some View {
+        VStack {
+            Image(systemName: "film")
+                .font(.title2)
+                .foregroundStyle(.secondary)
+            Text("No artwork")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
