@@ -7,9 +7,6 @@
     "Browse" : {
 
     },
-    "Episodes" : {
-
-    },
     "Genres" : {
 
     },
@@ -55,6 +52,46 @@
     },
     "Loading seasons…" : {
 
+    },
+    "media.labels.countEpisode %lld" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld episode"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld episodes"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld episode"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "%lld episodes"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "media.labels.seasonEpisode %lld %lld" : {
       "localizations" : {

@@ -32,7 +32,11 @@ struct EpisodeCardView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+#if os(tvOS) || os(macOS)
         .padding(12)
+#else
+        .padding(.vertical, 12)
+#endif
         .frame(width: cardWidth)
 #if os(tvOS)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18))

@@ -6,26 +6,29 @@ struct SeasonEpisodesSection: View {
 
     var body: some View {
         Section {
-            episodesContent
-                .padding(.horizontal, 16)
-                .padding(.bottom, 32)
-        } header: {
-            seasonSelectorHeader
+            sectionContent
         }
         .textCase(nil)
     }
 
-    private var seasonSelectorHeader: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Episodes")
-                .font(.title2)
-                .fontWeight(.bold)
-            seasonSelector
+    private var sectionContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Divider()
+            VStack(alignment: .leading, spacing: 12) {
+                seasonSelector
+                episodesCountTitle
+                episodesContent
+            }
+            .padding(.horizontal, 8)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial)
+        .padding(.bottom, 32)
+    }
+
+    private var episodesCountTitle: some View {
+        Text("media.labels.countEpisode \(viewModel.episodes.count)")
+            .font(.headline)
+            .fontWeight(.semibold)
     }
 
     @ViewBuilder
@@ -94,7 +97,11 @@ struct SeasonEpisodesSection: View {
             }
         }
         .pickerStyle(.menu)
-        .frame(maxWidth: 260, alignment: .leading)
+        .tint(.brandSecondaryForeground)
+        .background(.brandSecondary)
+        .padding(.vertical, 4)
+        .padding(.horizontal, 8)
+        .cornerRadius(12)
 #endif
     }
 
