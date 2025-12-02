@@ -4,9 +4,6 @@
     "Add a Plex server or pull to refresh." : {
 
     },
-    "Browse" : {
-
-    },
     "Episode %lld" : {
 
     },
@@ -152,6 +149,9 @@
         }
       }
     },
+    "Mr & Mrs Smith sample stream from videolan.org" : {
+
+    },
     "No artwork" : {
 
     },
@@ -183,9 +183,6 @@
 
     },
     "Read more" : {
-
-    },
-    "Recommended" : {
 
     },
     "Search" : {
@@ -487,6 +484,7 @@
       }
     },
     "signIn.tv.codeLabel %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -503,6 +501,7 @@
       }
     },
     "signIn.tv.subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -573,6 +572,9 @@
 
     },
     "Updating details" : {
+
+    },
+    "VLC Demo Stream" : {
 
     }
   },
