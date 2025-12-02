@@ -18,6 +18,7 @@ struct MediaDetailView: View {
                     Spacer().frame(height: heroHeight - 40)
 
                     headerSection
+                    playButton
                     badgesSection
 
                     if let tagline = viewModel.media.tagline, !tagline.isEmpty {
@@ -38,6 +39,7 @@ struct MediaDetailView: View {
                                 Text(isSummaryExpanded ? "Show less" : "Read more")
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
+                                    .tint(.brandSecondary)
                             }
                             .tint(.accentColor)
                         }
@@ -220,6 +222,21 @@ struct MediaDetailView: View {
             startPoint: .top,
             endPoint: .bottom
         )
+    }
+
+    private var playButton: some View {
+        Button(action: {}) {
+            HStack(spacing: 8) {
+                Image(systemName: "play.fill")
+                Text("Play")
+                    .fontWeight(.semibold)
+            }
+            .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.borderedProminent)
+        .controlSize(.large)
+        .tint(.brandSecondary)
+        .foregroundStyle(.brandSecondaryForeground)
     }
 }
 

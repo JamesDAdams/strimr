@@ -174,6 +174,10 @@ final class PlexMediaServerAPI {
     func getMetadata(ratingKey: String) async throws -> PlexItemMediaContainer {
         try await request(path: "/library/metadata/\(ratingKey)")
     }
+    
+    func getMetadataChildren(ratingKey: String) async throws -> PlexItemMediaContainer {
+        try await request(path: "/library/metadata/\(ratingKey)/children")
+    }
 
     private func request<Response: Decodable>(
         path: String,
