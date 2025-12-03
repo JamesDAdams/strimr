@@ -7,27 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E96FC0D62EDF97AD00133CFA /* MobileVLCKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = E96FC0D52EDF97AD00133CFA /* MobileVLCKit.xcframework */; };
-		E96FC0D72EDF97AD00133CFA /* MobileVLCKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E96FC0D52EDF97AD00133CFA /* MobileVLCKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E97F3FC32ED9E12000CA6E05 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		E96FC0D82EDF97AD00133CFA /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				E96FC0D72EDF97AD00133CFA /* MobileVLCKit.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		E96FC0D52EDF97AD00133CFA /* MobileVLCKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = MobileVLCKit.xcframework; path = Carthage/Build/MobileVLCKit.xcframework; sourceTree = "<group>"; };
 		E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E98A13B92ED8CBAD002F98B2 /* Strimr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Strimr.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -45,27 +28,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E96FC0D62EDF97AD00133CFA /* MobileVLCKit.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E96FC0D42EDF97AD00133CFA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				E96FC0D52EDF97AD00133CFA /* MobileVLCKit.xcframework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		E98A13B02ED8CBAD002F98B2 = {
 			isa = PBXGroup;
 			children = (
 				E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */,
 				E98A13BB2ED8CBAD002F98B2 /* Strimr */,
-				E96FC0D42EDF97AD00133CFA /* Frameworks */,
 				E98A13BA2ED8CBAD002F98B2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,7 +61,6 @@
 				E98A13B52ED8CBAD002F98B2 /* Sources */,
 				E98A13B62ED8CBAD002F98B2 /* Frameworks */,
 				E98A13B72ED8CBAD002F98B2 /* Resources */,
-				E96FC0D82EDF97AD00133CFA /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,15 +280,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
@@ -352,15 +323,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,3";
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
