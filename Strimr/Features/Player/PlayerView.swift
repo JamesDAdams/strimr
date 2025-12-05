@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 
 struct PlayerView: View {
+    let ratingKey: String
     @State private var coordinator = MPVPlayerView.Coordinator()
     @State private var isBuffering = false
     @State private var duration: Double?
@@ -141,5 +142,5 @@ struct PlayerView: View {
 }
 
 #Preview {
-    PlayerView()
+    PlayerView(ratingKey: "demo")
 }

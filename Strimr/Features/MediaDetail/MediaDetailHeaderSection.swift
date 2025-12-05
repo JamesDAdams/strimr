@@ -5,7 +5,7 @@ struct MediaDetailHeaderSection: View {
     @Bindable var viewModel: MediaDetailViewModel
     @Binding var isSummaryExpanded: Bool
     let heroHeight: CGFloat
-    let onPlay: () -> Void
+    let onPlay: (String) -> Void
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -198,7 +198,7 @@ struct MediaDetailHeaderSection: View {
     }
 
     private var playButton: some View {
-        Button(action: onPlay) {
+        Button(action: handlePlay) {
             HStack(spacing: 8) {
                 Image(systemName: "play.fill")
                 Text("Play")
@@ -210,5 +210,10 @@ struct MediaDetailHeaderSection: View {
         .controlSize(.large)
         .tint(.brandSecondary)
         .foregroundStyle(.brandSecondaryForeground)
+    }
+
+    private func handlePlay() {
+        guard viewModel.media.type == .movie else { return }
+        onPlay(viewModel.media.metadataRatingKey)
     }
 }

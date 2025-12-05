@@ -5,9 +5,9 @@ struct MediaDetailView: View {
     @State var viewModel: MediaDetailViewModel
     @State private var isSummaryExpanded = false
     private let heroHeight: CGFloat = 320
-    private let onPlay: () -> Void
+    private let onPlay: (String) -> Void
 
-    init(viewModel: MediaDetailViewModel, onPlay: @escaping () -> Void = {}) {
+    init(viewModel: MediaDetailViewModel, onPlay: @escaping (String) -> Void = { _ in }) {
         _viewModel = State(initialValue: viewModel)
         self.onPlay = onPlay
     }

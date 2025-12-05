@@ -18,7 +18,7 @@ final class MainCoordinator: ObservableObject {
     @Published var searchPath = NavigationPath()
     @Published var libraryPath = NavigationPath()
 
-    @Published var selectedMedia: MediaItem?
+    @Published var selectedRatingKey: String?
     @Published var isPresentingPlayer = false
 
     func pathBinding(for tab: Tab) -> Binding<NavigationPath> {
@@ -59,13 +59,13 @@ final class MainCoordinator: ObservableObject {
         }
     }
 
-    func showPlayer(for media: MediaItem) {
-        selectedMedia = media
+    func showPlayer(for ratingKey: String) {
+        selectedRatingKey = ratingKey
         isPresentingPlayer = true
     }
 
     func resetPlayer() {
-        selectedMedia = nil
+        selectedRatingKey = nil
         isPresentingPlayer = false
     }
 }
