@@ -6,6 +6,7 @@ struct PlayerView: View {
     @State private var isBuffering = false
     @State private var duration: Double?
     @State private var position = 0.0
+    @State private var bufferedAhead = 0.0
     @State private var controlsVisible = true
     @State private var hideControlsWorkItem: DispatchWorkItem?
     @State private var isScrubbing = false
@@ -29,6 +30,8 @@ struct PlayerView: View {
                         position = data as? Double ?? 0.0
                     case MPVProperty.duration:
                         duration = data as? Double
+                    case MPVProperty.demuxerCacheDuration:
+                        bufferedAhead = data as? Double ?? 0.0
                     case MPVProperty.videoParamsSigPeak:
                         let supportsHdr = (data as? Double ?? 1.0) > 1.0
                         player.hdrEnabled = supportsHdr
@@ -55,7 +58,7 @@ struct PlayerView: View {
             if controlsVisible {
                 VStack {
                     Spacer()
-                    PlayerControlsView(position: $position, duration: duration) { editing in
+                    PlayerControlsView(position: $position, duration: duration, bufferedAhead: bufferedAhead) { editing in
                         handleScrubbing(editing: editing)
                     }
                 }

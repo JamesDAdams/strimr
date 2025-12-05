@@ -13,4 +13,5 @@ struct MPVProperty {
     static let pausedForCache = "paused-for-cache"
     static let timePos = "time-pos"
     static let duration = "duration"
+    static let demuxerCacheDuration = "demuxer-cache-duration"
 }

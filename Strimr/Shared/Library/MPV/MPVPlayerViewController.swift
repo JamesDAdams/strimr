@@ -87,6 +87,7 @@ final class MPVPlayerViewController: UIViewController {
         mpv_observe_property(mpv, 0, MPVProperty.pausedForCache, MPV_FORMAT_FLAG)
         mpv_observe_property(mpv, 0, MPVProperty.timePos, MPV_FORMAT_DOUBLE)
         mpv_observe_property(mpv, 0, MPVProperty.duration, MPV_FORMAT_DOUBLE)
+        mpv_observe_property(mpv, 0, MPVProperty.demuxerCacheDuration, MPV_FORMAT_DOUBLE)
         mpv_set_wakeup_callback(self.mpv, { (ctx) in
             let client = unsafeBitCast(ctx, to: MPVPlayerViewController.self)
             client.readEvents()
@@ -244,7 +245,7 @@ final class MPVPlayerViewController: UIViewController {
                             DispatchQueue.main.async {
                                 self.playDelegate?.propertyChange(mpv: self.mpv, propertyName: propertyName, data: buffering)
                             }
-                        case MPVProperty.timePos, MPVProperty.duration:
+                        case MPVProperty.timePos, MPVProperty.duration, MPVProperty.demuxerCacheDuration:
                             let value = UnsafePointer<Double>(OpaquePointer(property.data))?.pointee
                             DispatchQueue.main.async {
                                 self.playDelegate?.propertyChange(mpv: self.mpv, propertyName: propertyName, data: value)

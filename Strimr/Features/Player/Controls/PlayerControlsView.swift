@@ -3,10 +3,22 @@ import SwiftUI
 struct PlayerControlsView: View {
     @Binding var position: Double
     var duration: Double?
+    var bufferedAhead: Double
     var onEditingChanged: (Bool) -> Void
     
     private var sliderUpperBound: Double {
         max(duration ?? 0, position, 1)
+    }
+
+    private var bufferedEnd: Double {
+        let bufferedPosition = position + bufferedAhead
+        guard let duration else { return bufferedPosition }
+        return min(bufferedPosition, duration)
+    }
+
+    private var bufferedProgress: Double {
+        guard sliderUpperBound > 0 else { return 0 }
+        return min(max(bufferedEnd / sliderUpperBound, 0), 1)
     }
     
     private var sliderBinding: Binding<Double> {
@@ -22,16 +34,12 @@ struct PlayerControlsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Slider(value: sliderBinding, in: 0...sliderUpperBound, onEditingChanged: onEditingChanged)
-                .tint(.white)
-                .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 8)
-                .background(alignment: .center) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.35))
-                        .frame(height: 4)
-                        .padding(.horizontal, 2)
-                        .allowsHitTesting(false)
-                }
+            ZStack {
+                bufferTrack
+                Slider(value: sliderBinding, in: 0...sliderUpperBound, onEditingChanged: onEditingChanged)
+                    .tint(.white)
+                    .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 8)
+            }
 
             HStack {
                 Text(elapsedText)
@@ -56,6 +64,25 @@ struct PlayerControlsView: View {
         return "-\(formatTime(remaining))"
     }
 
+    private var bufferTrack: some View {
+        GeometryReader { proxy in
+            let bufferWidth = proxy.size.width * bufferedProgress
+            ZStack(alignment: .leading) {
+                Capsule()
+                    .fill(Color.white.opacity(0.35))
+                Capsule()
+                    .fill(Color.white.opacity(0.65))
+                    .frame(width: bufferWidth)
+            }
+            .frame(height: 4)
+            .padding(.horizontal, 2)
+            .frame(maxHeight: .infinity, alignment: .center)
+            .allowsHitTesting(false)
+        }
+        .frame(maxWidth: .infinity, maxHeight: 28)
+        .accessibilityHidden(true)
+    }
+
     private func formatTime(_ seconds: Double) -> String {
         let totalSeconds = max(Int(seconds.rounded()), 0)
         let hours = totalSeconds / 3600
@@ -73,6 +100,6 @@ struct PlayerControlsView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        PlayerControlsView(position: .constant(15), duration: 60) { _ in }
+        PlayerControlsView(position: .constant(15), duration: 60, bufferedAhead: 20) { _ in }
     }
 }
