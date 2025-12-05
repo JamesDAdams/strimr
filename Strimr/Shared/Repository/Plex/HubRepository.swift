@@ -1,24 +1,24 @@
 import Foundation
 
-struct PlexHubParams: QueryItemConvertible {
-    var sectionIds: [Int]?
-    var count: Int?
-    var excludeFields: [String]?
-    var excludeContinueWatching: Bool?
-
-    var queryItems: [URLQueryItem] {
-        [
-            URLQueryItem.makeArray("sectionIds", sectionIds),
-            URLQueryItem.make("count", count),
-            URLQueryItem.makeArray("excludeFields", excludeFields),
-            URLQueryItem.makeBoolFlag("excludeContinueWatching", excludeContinueWatching),
-        ].compactMap { $0 }
-    }
-}
-
 final class HubRepository {
     private let network: PlexServerNetworkClient
     private weak var context: PlexAPIContext?
+
+    struct HubParams: QueryItemConvertible {
+        var sectionIds: [Int]?
+        var count: Int?
+        var excludeFields: [String]?
+        var excludeContinueWatching: Bool?
+
+        var queryItems: [URLQueryItem] {
+            [
+                URLQueryItem.makeArray("sectionIds", sectionIds),
+                URLQueryItem.make("count", count),
+                URLQueryItem.makeArray("excludeFields", excludeFields),
+                URLQueryItem.makeBoolFlag("excludeContinueWatching", excludeContinueWatching),
+            ].compactMap { $0 }
+        }
+    }
     
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
@@ -33,19 +33,21 @@ final class HubRepository {
         self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
     }
     
-    func getContinueWatchingHub(params: PlexHubParams = PlexHubParams()) async throws -> PlexHubMediaContainer {
-        try await network.request(path: "/hubs/continueWatching", queryItems: params.queryItems)
+    func getContinueWatchingHub(params: HubParams? = nil) async throws -> PlexHubMediaContainer {
+        let resolved = params ?? HubParams()
+        return try await network.request(path: "/hubs/continueWatching", queryItems: resolved.queryItems)
     }
 
-    func getPromotedHub(params: PlexHubParams = PlexHubParams()) async throws -> PlexHubMediaContainer {
-        var queryItems = params.queryItems
-        if params.count == nil {
+    func getPromotedHub(params: HubParams? = nil) async throws -> PlexHubMediaContainer {
+        let resolved = params ?? HubParams()
+        var queryItems = resolved.queryItems
+        if resolved.count == nil {
             queryItems.append(URLQueryItem(name: "count", value: "20"))
         }
-        if params.excludeFields == nil {
+        if resolved.excludeFields == nil {
             queryItems.append(URLQueryItem(name: "excludeFields", value: "summary"))
         }
-        if params.excludeContinueWatching == nil {
+        if resolved.excludeContinueWatching == nil {
             queryItems.append(URLQueryItem(name: "excludeContinueWatching", value: "1"))
         }
         return try await network.request(path: "/hubs/promoted", queryItems: queryItems)

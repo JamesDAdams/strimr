@@ -53,7 +53,7 @@ final class LibraryViewModel {
         do {
             let itemContainer = try await sectionRepository.getSectionsItems(
                 sectionId: sectionId,
-                params: PlexSectionItemsParams(sort: "random", limit: 1),
+                params: SectionRepository.SectionItemsParams(sort: "random", limit: 1),
                 pagination: PlexPagination(start: 0, size: 1)
             )
 

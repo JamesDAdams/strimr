@@ -1,22 +1,22 @@
 import Foundation
 
-struct PlexSectionItemsParams: QueryItemConvertible {
-    var sort: String?
-    var limit: Int?
-    var includeMeta: Bool?
-
-    var queryItems: [URLQueryItem] {
-        [
-            URLQueryItem.make("sort", sort),
-            URLQueryItem.make("limit", limit),
-            URLQueryItem.makeBoolFlag("includeMeta", includeMeta),
-        ].compactMap { $0 }
-    }
-}
-
 final class SectionRepository {
     private let network: PlexServerNetworkClient
     private weak var context: PlexAPIContext?
+
+    struct SectionItemsParams: QueryItemConvertible {
+        var sort: String?
+        var limit: Int?
+        var includeMeta: Bool?
+
+        var queryItems: [URLQueryItem] {
+            [
+                URLQueryItem.make("sort", sort),
+                URLQueryItem.make("limit", limit),
+                URLQueryItem.makeBoolFlag("includeMeta", includeMeta),
+            ].compactMap { $0 }
+        }
+    }
     
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
@@ -37,20 +37,22 @@ final class SectionRepository {
 
     func getSectionsItems(
         sectionId: Int,
-        params: PlexSectionItemsParams = PlexSectionItemsParams(),
-        pagination: PlexPagination = PlexPagination()
+        params: SectionItemsParams? = nil,
+        pagination: PlexPagination? = nil
     ) async throws -> PlexItemMediaContainer {
-        try await network.request(
+        let resolvedParams = params ?? SectionItemsParams()
+        let resolvedPagination = pagination ?? PlexPagination()
+        return try await network.request(
             path: "/library/sections/\(sectionId)/all",
-            queryItems: params.queryItems,
-            headers: pagination.headers
+            queryItems: resolvedParams.queryItems,
+            headers: resolvedPagination.headers
         )
     }
 
     func getSectionsItemsMeta(sectionId: Int) async throws -> PlexSectionMetaMediaContainer {
         try await network.request(
             path: "/library/sections/\(sectionId)/all",
-            queryItems: PlexSectionItemsParams(includeMeta: true).queryItems,
+            queryItems: SectionItemsParams(includeMeta: true).queryItems,
             headers: PlexPagination(start: 0, size: 0).headers
         )
     }
