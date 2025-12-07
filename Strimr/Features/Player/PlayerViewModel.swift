@@ -16,6 +16,9 @@ final class PlayerViewModel {
     var preferredAudioStreamFFIndex: Int?
     var preferredSubtitleStreamFFIndex: Int?
 
+    @ObservationIgnored private let timelineInterval: TimeInterval = 10
+    @ObservationIgnored private var lastTimelineSentAt: Date?
+    @ObservationIgnored private var lastTimelineState: PlaybackRepository.PlaybackState?
     @ObservationIgnored private let ratingKey: String
     @ObservationIgnored private let context: PlexAPIContext
     @ObservationIgnored private var activePartId: Int?
@@ -65,20 +68,76 @@ final class PlayerViewModel {
         data: Any?,
         isScrubbing: Bool
     ) {
+        let previousState = playbackState
+        var stateChanged = false
+
         switch name {
         case MPVProperty.pause:
             isPaused = (data as? Bool) ?? false
+            stateChanged = previousState != playbackState
         case MPVProperty.pausedForCache:
             isBuffering = (data as? Bool) ?? false
+            stateChanged = previousState != playbackState
         case MPVProperty.timePos:
             guard !isScrubbing else { return }
             position = data as? Double ?? 0.0
+            reportTimeline(state: playbackState)
         case MPVProperty.duration:
             duration = data as? Double
         case MPVProperty.demuxerCacheDuration:
             bufferedAhead = data as? Double ?? 0.0
         default:
             break
+        }
+
+        if stateChanged {
+            reportTimeline(state: playbackState, force: true)
+        }
+    }
+
+    func handleStop() {
+        reportTimeline(state: .stopped, force: true)
+    }
+
+    private var playbackState: PlaybackRepository.PlaybackState {
+        if isBuffering {
+            return .buffering
+        }
+        return isPaused ? .paused : .playing
+    }
+
+    private func reportTimeline(
+        state: PlaybackRepository.PlaybackState,
+        force: Bool = false
+    ) {
+        let now = Date()
+        let stateChanged = lastTimelineState != state
+        let shouldSend = force || stateChanged || lastTimelineSentAt.map { now.timeIntervalSince($0) >= timelineInterval } ?? true
+
+        guard shouldSend else { return }
+
+        lastTimelineSentAt = now
+        lastTimelineState = state
+
+        Task {
+            await sendTimeline(state: state)
+        }
+    }
+
+    private func sendTimeline(state: PlaybackRepository.PlaybackState) async {
+        let currentTime = max(0, Int(position * 1000))
+        let currentDuration = max(0, Int((duration ?? 0) * 1000))
+
+        do {
+            let repository = try PlaybackRepository(context: context)
+            try await repository.updateTimeline(
+                ratingKey: ratingKey,
+                state: state,
+                time: currentTime,
+                duration: currentDuration
+            )
+        } catch {
+            debugPrint("Failed to update timeline:", error)
         }
     }
 

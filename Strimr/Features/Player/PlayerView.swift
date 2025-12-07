@@ -76,6 +76,7 @@ struct PlayerView: View {
             showControls(temporarily: true)
         }
         .onDisappear {
+            viewModel.handleStop()
             hideControlsWorkItem?.cancel()
             coordinator.player?.destruct()
         }

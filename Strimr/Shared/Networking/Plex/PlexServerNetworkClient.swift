@@ -5,11 +5,13 @@ final class PlexServerNetworkClient {
     private var authToken: String
     private var baseURL: URL
     private var language: String
+    private var clientIdentifier: String?
     
-    init(authToken: String, baseURL: URL, language: String = "en") {
+    init(authToken: String, baseURL: URL, clientIdentifier: String? = nil, language: String = "en") {
         self.authToken = authToken
         self.baseURL = baseURL
         self.language = language
+        self.clientIdentifier = clientIdentifier
     }
     
     func request<Response: Decodable>(
@@ -75,6 +77,9 @@ final class PlexServerNetworkClient {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(authToken, forHTTPHeaderField: "X-Plex-Token")
         request.setValue(language, forHTTPHeaderField: "X-Plex-Language")
+        if let clientIdentifier = self.clientIdentifier {
+            request.setValue(clientIdentifier, forHTTPHeaderField: "X-Plex-Client-Identifier")
+        }
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
         }

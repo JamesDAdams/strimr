@@ -4,6 +4,13 @@ final class PlaybackRepository {
     private let network: PlexServerNetworkClient
     private weak var context: PlexAPIContext?
 
+    enum PlaybackState: String {
+        case playing
+        case buffering
+        case paused
+        case stopped
+    }
+
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
             throw PlexAPIError.missingConnection
@@ -14,7 +21,7 @@ final class PlaybackRepository {
         }
 
         self.context = context
-        self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
+        self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer, clientIdentifier: context.clientIdentifier)
     }
 
     func setPreferredStreams(
@@ -39,6 +46,23 @@ final class PlaybackRepository {
             path: "/library/parts/\(partId)",
             queryItems: queryItems,
             method: "PUT"
+        )
+    }
+
+    func updateTimeline(
+        ratingKey: String,
+        state: PlaybackState,
+        time: Int,
+        duration: Int
+    ) async throws {
+        try await network.send(
+            path: "/:/timeline",
+            queryItems: [
+                URLQueryItem(name: "ratingKey", value: ratingKey),
+                URLQueryItem(name: "state", value: state.rawValue),
+                URLQueryItem(name: "time", value: String(time)),
+                URLQueryItem(name: "duration", value: String(duration)),
+            ]
         )
     }
 }
