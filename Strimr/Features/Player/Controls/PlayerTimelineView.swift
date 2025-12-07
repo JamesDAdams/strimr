@@ -4,6 +4,7 @@ struct PlayerTimelineView: View {
     @Binding var position: Double
     var duration: Double?
     var bufferedAhead: Double
+    var supportsHDR: Bool
     var onEditingChanged: (Bool) -> Void
 
     private var sliderUpperBound: Double {
@@ -34,6 +35,13 @@ struct PlayerTimelineView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            if supportsHDR {
+                HStack {
+                    Spacer()
+                    PlayerBadge("HDR", systemImage: "sparkles")
+                }
+            }
+            
             ZStack {
                 bufferTrack
                 Slider(value: sliderBinding, in: 0...sliderUpperBound, onEditingChanged: onEditingChanged)
@@ -100,6 +108,6 @@ struct PlayerTimelineView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        PlayerTimelineView(position: .constant(15), duration: 60, bufferedAhead: 20) { _ in }
+        PlayerTimelineView(position: .constant(15), duration: 60, bufferedAhead: 20, supportsHDR: true) { _ in }
     }
 }

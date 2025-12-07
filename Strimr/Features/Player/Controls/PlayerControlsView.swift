@@ -19,7 +19,6 @@ struct PlayerControlsView: View {
             VStack(spacing: 18) {
                 PlayerControlsHeader(
                     media: media,
-                    supportsHDR: supportsHDR,
                     onDismiss: onDismiss
                 )
 
@@ -38,6 +37,7 @@ struct PlayerControlsView: View {
                     position: $position,
                     duration: duration,
                     bufferedAhead: bufferedAhead,
+                    supportsHDR: supportsHDR,
                     onEditingChanged: onScrubbingChanged
                 )
             }
@@ -52,7 +52,6 @@ struct PlayerControlsView: View {
 
 private struct PlayerControlsHeader: View {
     var media: MediaItem?
-    var supportsHDR: Bool
     var onDismiss: () -> Void
 
     var body: some View {
@@ -86,12 +85,6 @@ private struct PlayerControlsHeader: View {
             }
 
             Spacer()
-
-            VStack(alignment: .trailing, spacing: 8) {
-                if supportsHDR {
-                    PlayerBadge("HDR", systemImage: "sparkles")
-                }
-            }
         }
         .padding(.horizontal, 24)
         .padding(.vertical, 8)
@@ -154,7 +147,7 @@ private struct PlayerControlsBackground: View {
     }
 }
 
-private struct PlayerBadge: View {
+struct PlayerBadge: View {
     var title: String
     var systemImage: String?
 
