@@ -8,12 +8,14 @@ final class MetadataRepository {
         var checkFiles: Bool?
         var includeChapters: Bool?
         var includeMarkers: Bool?
+        var includeOnDeck: Bool?
 
         var queryItems: [URLQueryItem] {
             [
                 URLQueryItem.makeBoolFlag("checkFiles", checkFiles),
                 URLQueryItem.makeBoolFlag("includeChapters", includeChapters),
                 URLQueryItem.makeBoolFlag("includeMarkers", includeMarkers),
+                URLQueryItem.makeBoolFlag("includeOnDeck", includeOnDeck),
             ].compactMap { $0 }
         }
     }

@@ -229,6 +229,8 @@ struct PlexItem: Codable, Equatable {
     let originalTitle: String?
     let grandparentThumb: String?
     let grandparentArt: String?
+    
+    let onDeck: PlexOnDeck?
 
     private enum CodingKeys: String, CodingKey {
         case ratingKey, key, guid, type, title, summary, thumb, art, year, viewOffset, lastViewedAt, viewCount
@@ -248,6 +250,7 @@ struct PlexItem: Codable, Equatable {
         case writers = "Writer"
         case roles = "Role"
         case media = "Media"
+        case onDeck = "OnDeck"
     }
 }
 
@@ -266,6 +269,22 @@ struct PlexHubMediaContainer: Codable, Equatable {
 
     private enum CodingKeys: String, CodingKey {
         case mediaContainer = "MediaContainer"
+    }
+}
+
+final class PlexOnDeck: Codable, Equatable {
+    let metadata: PlexItem?
+
+    init(metadata: PlexItem?) {
+        self.metadata = metadata
+    }
+
+    static func == (lhs: PlexOnDeck, rhs: PlexOnDeck) -> Bool {
+        lhs.metadata == rhs.metadata
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case metadata = "Metadata"
     }
 }
 

@@ -8,6 +8,7 @@ final class MediaDetailViewModel {
     @ObservationIgnored private let context: PlexAPIContext
 
     var media: MediaItem
+    var onDeckItem: MediaItem?
     var heroImageURL: URL?
     var isLoading = false
     var errorMessage: String?
@@ -37,14 +38,20 @@ final class MediaDetailViewModel {
 
         isLoading = true
         errorMessage = nil
+        onDeckItem = nil
 
         do {
-            let response = try await metadataRepository.getMetadata(ratingKey: media.metadataRatingKey)
+            let params = MetadataRepository.PlexMetadataParams(includeOnDeck: true)
+            let response = try await metadataRepository.getMetadata(
+                ratingKey: media.metadataRatingKey,
+                params: params
+            )
             if let item = response.mediaContainer.metadata?.first {
                 media = MediaItem(plexItem: item)
                 resolveArtwork()
                 resolveGradient()
             }
+            onDeckItem = response.mediaContainer.metadata?.first?.onDeck?.metadata.map { MediaItem(plexItem: $0) }
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -104,13 +111,7 @@ final class MediaDetailViewModel {
 
     var runtimeText: String? {
         guard let duration = media.duration else { return nil }
-        let minutes = Int(duration / 60)
-        let hours = minutes / 60
-        let remainingMinutes = minutes % 60
-        if hours > 0 {
-            return "\(hours)h \(remainingMinutes)m"
-        }
-        return "\(remainingMinutes)m"
+        return formatDuration(duration)
     }
 
     var yearText: String? {
@@ -131,6 +132,92 @@ final class MediaDetailViewModel {
 
     func runtimeText(for item: MediaItem) -> String? {
         guard let duration = item.duration else { return nil }
+        return formatDuration(duration)
+    }
+
+    var primaryActionTitle: String {
+        switch media.type {
+        case .movie:
+            return hasProgress(for: media) ? "Resume" : "Play"
+        case .show:
+            return hasProgress(for: onDeckItem) ? "Resume" : "Play"
+        case .season, .episode:
+            return hasProgress(for: media) ? "Resume" : "Play"
+        }
+    }
+
+    var primaryActionDetail: String? {
+        switch media.type {
+        case .movie:
+            return timeLeftText(for: media)
+        case .show:
+            guard let onDeckItem else { return nil }
+            let episodeLabel = seasonEpisodeLabel(for: onDeckItem)
+            let timeLeft = timeLeftText(for: onDeckItem)
+            if let timeLeft, let episodeLabel {
+                return "\(episodeLabel) • \(timeLeft)"
+            }
+            return episodeLabel ?? timeLeft
+        case .season, .episode:
+            return timeLeftText(for: media)
+        }
+    }
+
+    var primaryActionProgress: Double? {
+        switch media.type {
+        case .movie:
+            return progressFraction(for: media)
+        case .show:
+            guard let onDeckItem else { return nil }
+            return progressFraction(for: onDeckItem)
+        case .season, .episode:
+            return progressFraction(for: media)
+        }
+    }
+
+    var primaryActionRatingKey: String? {
+        switch media.type {
+        case .movie:
+            return media.id
+        case .show:
+            return onDeckItem?.id
+        case .season, .episode:
+            return media.id
+        }
+    }
+
+    func progressFraction(for item: MediaItem) -> Double? {
+        guard let percentage = item.viewProgressPercentage else { return nil }
+        return min(1, max(0, percentage / 100))
+    }
+
+    private func hasProgress(for item: MediaItem?) -> Bool {
+        guard let viewOffset = item?.viewOffset else { return false }
+        return viewOffset > 0
+    }
+
+    private func timeLeftText(for item: MediaItem?) -> String? {
+        guard
+            let item,
+            let duration = item.duration,
+            let viewOffset = item.viewOffset,
+            viewOffset > 0
+        else {
+            return nil
+        }
+
+        let remaining = max(0, duration - viewOffset)
+        guard remaining > 0 else { return nil }
+
+        return "\(formatDuration(remaining)) left"
+    }
+
+    private func seasonEpisodeLabel(for item: MediaItem) -> String? {
+        guard let season = item.parentIndex, let episode = item.index else { return nil }
+        return "S\(season) - E\(episode)"
+    }
+
+    private func formatDuration(_ duration: TimeInterval) -> String {
         let minutes = Int(duration / 60)
         let hours = minutes / 60
         let remainingMinutes = minutes % 60
@@ -138,11 +225,6 @@ final class MediaDetailViewModel {
             return "\(hours)h \(remainingMinutes)m"
         }
         return "\(remainingMinutes)m"
-    }
-
-    func progressFraction(for item: MediaItem) -> Double? {
-        guard let percentage = item.viewProgressPercentage else { return nil }
-        return min(1, max(0, percentage / 100))
     }
 
     private func fetchSeasons() async {

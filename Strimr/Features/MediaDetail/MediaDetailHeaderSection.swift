@@ -199,10 +199,17 @@ struct MediaDetailHeaderSection: View {
 
     private var playButton: some View {
         Button(action: handlePlay) {
-            HStack(spacing: 8) {
-                Image(systemName: "play.fill")
-                Text("Play")
-                    .fontWeight(.semibold)
+            HStack(spacing: 12) {
+                PlayProgressIcon(progress: viewModel.primaryActionProgress)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(viewModel.primaryActionTitle)
+                        .fontWeight(.semibold)
+                    if let detail = viewModel.primaryActionDetail {
+                        Text(detail)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
         }
@@ -210,10 +217,35 @@ struct MediaDetailHeaderSection: View {
         .controlSize(.large)
         .tint(.brandSecondary)
         .foregroundStyle(.brandSecondaryForeground)
+        .disabled(viewModel.primaryActionRatingKey == nil)
     }
 
     private func handlePlay() {
-        guard viewModel.media.type == .movie else { return }
-        onPlay(viewModel.media.metadataRatingKey)
+        guard let ratingKey = viewModel.primaryActionRatingKey else { return }
+        onPlay(ratingKey)
+    }
+}
+
+private struct PlayProgressIcon: View {
+    let progress: Double?
+
+    var body: some View {
+        ZStack {
+            if let progress {
+                Circle()
+                    .stroke(Color.brandSecondaryForeground.opacity(0.25), lineWidth: 4)
+                Circle()
+                    .trim(from: 0, to: progress)
+                    .stroke(
+                        Color.brandSecondaryForeground,
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round)
+                    )
+                    .rotationEffect(.degrees(-90))
+            }
+
+            Image(systemName: "play.fill")
+                .font(.title3.weight(.semibold))
+        }
+        .frame(width: 30, height: 30)
     }
 }
