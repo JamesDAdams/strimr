@@ -16,6 +16,9 @@
     "Episode %lld" : {
 
     },
+    "Find movies, shows, and episodes across your Plex libraries." : {
+
+    },
     "Genres" : {
 
     },
@@ -173,6 +176,9 @@
     "No libraries yet" : {
 
     },
+    "No matches" : {
+
+    },
     "No seasons available yet." : {
 
     },
@@ -198,6 +204,15 @@
 
     },
     "Search" : {
+
+    },
+    "Search movies, shows, episodes" : {
+
+    },
+    "Search your library" : {
+
+    },
+    "Searching…" : {
 
     },
     "Season" : {
@@ -579,6 +594,9 @@
           }
         }
       }
+    },
+    "Try a different query or adjust the filters." : {
+
     },
     "Try again later." : {
 

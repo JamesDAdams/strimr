@@ -26,10 +26,13 @@ struct MainTabView: View {
             .tag(MainCoordinator.Tab.home)
 
             NavigationStack(path: coordinator.pathBinding(for: .search)) {
-                SearchView()
-                    .navigationDestination(for: MainCoordinator.Route.self) { route in
-                        destination(for: route)
-                    }
+                SearchView(
+                    viewModel: SearchViewModel(context: plexApiContext),
+                    onSelectMedia: coordinator.showMediaDetail
+                )
+                .navigationDestination(for: MainCoordinator.Route.self) { route in
+                    destination(for: route)
+                }
             }
             .tabItem { Label("tabs.search", systemImage: "magnifyingglass") }
             .tag(MainCoordinator.Tab.search)

@@ -289,6 +289,34 @@ struct PlexItemMediaContainer: Codable, Equatable {
     }
 }
 
+struct PlexSearchResult: Codable, Equatable {
+    let score: Double?
+    let metadata: PlexItem?
+
+    private enum CodingKeys: String, CodingKey {
+        case score
+        case metadata = "Metadata"
+    }
+}
+
+struct PlexSearchMediaContainer: Codable, Equatable {
+    struct MediaContainer: Codable, Equatable {
+        let size: Int?
+        let searchResult: [PlexSearchResult]?
+
+        private enum CodingKeys: String, CodingKey {
+            case size
+            case searchResult = "SearchResult"
+        }
+    }
+
+    let mediaContainer: MediaContainer
+
+    private enum CodingKeys: String, CodingKey {
+        case mediaContainer = "MediaContainer"
+    }
+}
+
 struct PlexSectionMediaContainer: Codable, Equatable {
     struct MediaContainer: Codable, Equatable {
         let size: Int?
