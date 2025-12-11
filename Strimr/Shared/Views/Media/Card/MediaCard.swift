@@ -41,6 +41,9 @@ struct MediaCard: View {
                 .clipShape(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                 )
+                .overlay(alignment: .topTrailing) {
+                    WatchStatusBadge(media: media)
+                }
                 .overlay(alignment: .bottomLeading) {
                     if let progress {
                         ProgressView(value: progress)

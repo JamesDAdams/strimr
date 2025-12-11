@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%lld" : {
+
+    },
     "Add a Plex server or pull to refresh." : {
 
     },

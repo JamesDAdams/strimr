@@ -16,6 +16,7 @@ struct EpisodeCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             EpisodeArtworkView(
+                episode: episode,
                 imageURL: imageURL,
                 width: cardWidth,
                 runtime: runtime,
@@ -89,6 +90,7 @@ struct EpisodeCardView: View {
 }
 
 struct EpisodeArtworkView: View {
+    let episode: MediaItem
     let imageURL: URL?
     let width: CGFloat?
     let runtime: String?
@@ -144,6 +146,9 @@ struct EpisodeArtworkView: View {
         .overlay {
             RoundedRectangle(cornerRadius: 12)
                 .strokeBorder(.white.opacity(0.05))
+        }
+        .overlay(alignment: .topTrailing) {
+            WatchStatusBadge(media: episode)
         }
     }
 }
