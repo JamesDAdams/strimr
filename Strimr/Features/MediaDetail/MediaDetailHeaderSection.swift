@@ -16,6 +16,7 @@ struct MediaDetailHeaderSection: View {
 
                 headerSection
                 playButton
+                secondaryButtonsRow
                 badgesSection
 
                 if let tagline = viewModel.media.tagline, !tagline.isEmpty {
@@ -50,6 +51,11 @@ struct MediaDetailHeaderSection: View {
 
                 if let errorMessage = viewModel.errorMessage {
                     Label(errorMessage, systemImage: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.red)
+                }
+
+                if let watchActionErrorMessage = viewModel.watchActionErrorMessage {
+                    Label(watchActionErrorMessage, systemImage: "exclamationmark.octagon.fill")
                         .foregroundStyle(.red)
                 }
 
@@ -197,6 +203,13 @@ struct MediaDetailHeaderSection: View {
         )
     }
 
+    private var secondaryButtonsRow: some View {
+        HStack(spacing: 12) {
+            watchToggleButton
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+
     private var playButton: some View {
         Button(action: handlePlay) {
             HStack(spacing: 12) {
@@ -218,6 +231,35 @@ struct MediaDetailHeaderSection: View {
         .tint(.brandSecondary)
         .foregroundStyle(.brandSecondaryForeground)
         .disabled(viewModel.primaryActionRatingKey == nil)
+    }
+
+    private var watchToggleButton: some View {
+        VStack(spacing: 2) {
+            Button {
+                Task {
+                    await viewModel.toggleWatchStatus()
+                }
+            } label: {
+                if viewModel.isUpdatingWatchStatus {
+                    ProgressView()
+                        .tint(.brandSecondaryForeground)
+                } else {
+                    Image(systemName: viewModel.watchActionIcon)
+                        .font(.headline.weight(.semibold))
+                }
+            }
+            .frame(width: 48, height: 44)
+            .buttonStyle(.bordered)
+            .controlSize(.regular)
+            .tint(.brandSecondary)
+            .disabled(viewModel.isLoading || viewModel.isUpdatingWatchStatus)
+
+            Text(viewModel.watchActionTitle)
+                .font(.caption2)
+                .foregroundStyle(.primary)
+                .frame(maxWidth: 48)
+                .multilineTextAlignment(.center)
+        }
     }
 
     private func handlePlay() {

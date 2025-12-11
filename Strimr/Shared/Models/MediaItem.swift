@@ -18,7 +18,10 @@ struct MediaItem: Identifiable, Hashable {
     let artPath: String?
     let ultraBlurColors: PlexUltraBlurColors?
     let viewOffset: TimeInterval?
+    let viewCount: Int?
     let childCount: Int?
+    let leafCount: Int?
+    let viewedLeafCount: Int?
     let grandparentTitle: String?
     let parentTitle: String?
     let parentIndex: Int?

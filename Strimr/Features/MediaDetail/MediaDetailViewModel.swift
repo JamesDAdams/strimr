@@ -20,6 +20,8 @@ final class MediaDetailViewModel {
     var isLoadingEpisodes = false
     var seasonsErrorMessage: String?
     var episodesErrorMessage: String?
+    private var updatingWatchStatusIds: Set<String> = []
+    var watchActionErrorMessage: String?
 
     init(media: MediaItem, context: PlexAPIContext) {
         self.media = media
@@ -39,6 +41,7 @@ final class MediaDetailViewModel {
         isLoading = true
         errorMessage = nil
         onDeckItem = nil
+        watchActionErrorMessage = nil
 
         do {
             let params = MetadataRepository.PlexMetadataParams(includeOnDeck: true)
@@ -72,6 +75,38 @@ final class MediaDetailViewModel {
         episodes = []
         episodesErrorMessage = nil
         await fetchEpisodes(for: id)
+    }
+
+    func toggleWatchStatus(for target: MediaItem? = nil) async {
+        let item = target ?? media
+
+        guard let scrobbleRepository = try? ScrobbleRepository(context: context) else {
+            if target == nil {
+                watchActionErrorMessage = "Select a server to update watch status."
+            }
+            return
+        }
+
+        guard !isUpdatingWatchStatus(for: item) else { return }
+
+        updatingWatchStatusIds.insert(item.id)
+        if target == nil {
+            watchActionErrorMessage = nil
+        }
+        defer { updatingWatchStatusIds.remove(item.id) }
+
+        do {
+            if isWatched(item) {
+                try await scrobbleRepository.markUnwatched(key: item.id)
+            } else {
+                try await scrobbleRepository.markWatched(key: item.id)
+            }
+            await loadDetails()
+        } catch {
+            if target == nil {
+                watchActionErrorMessage = error.localizedDescription
+            }
+        }
     }
 
     func imageURL(for media: MediaItem, width: Int = 320, height: Int = 180) -> URL? {
@@ -184,6 +219,45 @@ final class MediaDetailViewModel {
         case .season, .episode:
             return media.id
         }
+    }
+
+    var isWatched: Bool { isWatched(media) }
+
+    var watchActionTitle: String {
+        watchActionTitle(for: media)
+    }
+
+    var watchActionIcon: String {
+        watchActionIcon(for: media)
+    }
+
+    var isUpdatingWatchStatus: Bool {
+        isUpdatingWatchStatus(for: media)
+    }
+
+    func isWatched(_ item: MediaItem) -> Bool {
+        switch item.type {
+        case .movie, .episode:
+            return (item.viewCount ?? 0) > 0
+        case .show, .season:
+            guard let leafCount = item.leafCount, let viewedLeafCount = item.viewedLeafCount else {
+                return false
+            }
+            guard leafCount > 0 else { return false }
+            return leafCount == viewedLeafCount
+        }
+    }
+
+    func watchActionTitle(for item: MediaItem) -> String {
+        isWatched(item) ? "Mark as unwatched" : "Mark as watched"
+    }
+
+    func watchActionIcon(for item: MediaItem) -> String {
+        isWatched(item) ? "checkmark.circle.fill" : "checkmark.circle"
+    }
+
+    func isUpdatingWatchStatus(for item: MediaItem) -> Bool {
+        updatingWatchStatusIds.contains(item.id)
     }
 
     func progressFraction(for item: MediaItem) -> Double? {

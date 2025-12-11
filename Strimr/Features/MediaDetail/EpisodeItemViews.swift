@@ -6,6 +6,9 @@ struct EpisodeCardView: View {
     let runtime: String?
     let progress: Double?
     let cardWidth: CGFloat?
+    let isWatched: Bool
+    let isUpdatingWatchStatus: Bool
+    let onToggleWatch: (() -> Void)?
 #if os(macOS)
     @State private var isHovering = false
 #endif
@@ -19,10 +22,34 @@ struct EpisodeCardView: View {
                 progress: progress
             )
 
-            if let index = episode.index {
-                Text("Episode \(index)")
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+            HStack(alignment: .center, spacing: 8) {
+                if let index = episode.index {
+                    Text("Episode \(index)")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                if let onToggleWatch {
+                    Button {
+                        onToggleWatch()
+                    } label: {
+                        Group {
+                            if isUpdatingWatchStatus {
+                                ProgressView()
+                                    .scaleEffect(0.8, anchor: .center)
+                            } else {
+                                Image(systemName: isWatched ? "checkmark.circle.fill" : "checkmark.circle")
+                                    .font(.headline.weight(.semibold))
+                            }
+                        }
+                        .frame(width: 22, height: 22)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .tint(.brandSecondary)
+                }
             }
 
             Text(episode.title)

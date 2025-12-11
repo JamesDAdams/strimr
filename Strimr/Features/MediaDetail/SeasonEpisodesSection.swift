@@ -49,7 +49,11 @@ struct SeasonEpisodesSection: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         } else {
-            seasonPickerControl
+            HStack(alignment: .center, spacing: 10) {
+                seasonPickerControl
+                Spacer(minLength: 0)
+                seasonWatchToggle
+            }
         }
     }
 
@@ -104,6 +108,33 @@ struct SeasonEpisodesSection: View {
     }
 
     @ViewBuilder
+    private var seasonWatchToggle: some View {
+        if let season = viewModel.selectedSeason ?? viewModel.seasons.first {
+            Button {
+                Task {
+                    await viewModel.toggleWatchStatus(for: season)
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    if viewModel.isUpdatingWatchStatus(for: season) {
+                        ProgressView()
+                    } else {
+                        Image(systemName: viewModel.watchActionIcon(for: season))
+                    }
+                    Text(viewModel.watchActionTitle(for: season))
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                }
+                .padding(.horizontal, 10)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .tint(.brandSecondary)
+            .disabled(viewModel.isUpdatingWatchStatus(for: season))
+        }
+    }
+
+    @ViewBuilder
     private var episodesContent: some View {
         if let error = viewModel.seasonsErrorMessage {
             Label(error, systemImage: "exclamationmark.triangle.fill")
@@ -149,7 +180,14 @@ struct SeasonEpisodesSection: View {
                         imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
                         runtime: viewModel.runtimeText(for: episode),
                         progress: viewModel.progressFraction(for: episode),
-                        cardWidth: 520
+                        cardWidth: 520,
+                        isWatched: viewModel.isWatched(episode),
+                        isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
+                        onToggleWatch: {
+                            Task {
+                                await viewModel.toggleWatchStatus(for: episode)
+                            }
+                        }
                     )
                 }
             }
@@ -163,7 +201,14 @@ struct SeasonEpisodesSection: View {
                     imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
                     runtime: viewModel.runtimeText(for: episode),
                     progress: viewModel.progressFraction(for: episode),
-                    cardWidth: nil
+                    cardWidth: nil,
+                    isWatched: viewModel.isWatched(episode),
+                    isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
+                    onToggleWatch: {
+                        Task {
+                            await viewModel.toggleWatchStatus(for: episode)
+                        }
+                    }
                 )
             }
         }
@@ -175,7 +220,14 @@ struct SeasonEpisodesSection: View {
                     imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
                     runtime: viewModel.runtimeText(for: episode),
                     progress: viewModel.progressFraction(for: episode),
-                    cardWidth: nil
+                    cardWidth: nil,
+                    isWatched: viewModel.isWatched(episode),
+                    isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
+                    onToggleWatch: {
+                        Task {
+                            await viewModel.toggleWatchStatus(for: episode)
+                        }
+                    }
                 )
                 if index < viewModel.episodes.count - 1 {
                     Divider()
