@@ -112,6 +112,53 @@ struct PlexUltraBlurColors: Codable, Equatable, Hashable {
     let bottomLeft: String
 }
 
+struct PlexMarkerAttributes: Codable, Equatable {
+    let id: Int
+    let version: Int?
+}
+
+enum PlexMarkerType: String, Codable {
+    case intro
+    case credits
+}
+
+struct PlexMarker: Codable, Equatable {
+    let id: Int
+    let type: PlexMarkerType
+    let startTimeOffset: Int
+    let endTimeOffset: Int
+    let isFinal: Bool?
+    let attributes: PlexMarkerAttributes?
+
+    var startTime: Double {
+        Double(startTimeOffset) / 1000
+    }
+
+    var endTime: Double {
+        Double(endTimeOffset) / 1000
+    }
+
+    var isIntro: Bool {
+        if case .intro = type { return true }
+        return false
+    }
+
+    var isCredits: Bool {
+        if case .credits = type { return true }
+        return false
+    }
+
+    func contains(time: Double) -> Bool {
+        time >= startTime && time <= endTime
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, type, startTimeOffset, endTimeOffset
+        case attributes = "Attributes"
+        case isFinal = "final"
+    }
+}
+
 struct PlexPartStream: Codable, Equatable, Hashable {
     enum PlexPartStreamType: Int, Codable, Equatable {
         case video = 1
@@ -200,6 +247,7 @@ struct PlexItem: Codable, Equatable {
     let writers: [PlexTagPerson]?
     let roles: [PlexTagPerson]?
     let media: [PlexMedia]?
+    let markers: [PlexMarker]?
 
     // Movie
     let slug: String?
@@ -257,6 +305,7 @@ struct PlexItem: Codable, Equatable {
         case writers = "Writer"
         case roles = "Role"
         case media = "Media"
+        case markers = "Marker"
         case onDeck = "OnDeck"
     }
 }

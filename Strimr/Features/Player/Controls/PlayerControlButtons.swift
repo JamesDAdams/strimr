@@ -62,3 +62,39 @@ struct PlayPauseButton: View {
         .accessibilityLabel(isPaused ? "Play" : "Pause")
     }
 }
+
+struct SkipMarkerButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Text(title)
+                    .font(.callout.weight(.semibold))
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.bold))
+            }
+            .foregroundStyle(.black)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                LinearGradient(
+                    colors: [
+                        Color.white,
+                        Color.white.opacity(0.9)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                ),
+                in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(Color.white.opacity(0.35), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.3), radius: 16, x: 0, y: 12)
+        }
+        .accessibilityLabel(title)
+    }
+}

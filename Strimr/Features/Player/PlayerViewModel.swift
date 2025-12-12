@@ -18,6 +18,11 @@ final class PlayerViewModel {
     var resumePosition: Double? {
         media?.viewOffset
     }
+    var markers: [PlexMarker] = []
+    var activeSkipMarker: PlexMarker? {
+        activeMarker(where: \.isIntro)
+        ?? activeMarker(where: \.isCredits)
+    }
 
     @ObservationIgnored private let timelineInterval: TimeInterval = 10
     @ObservationIgnored private var lastTimelineSentAt: Date?
@@ -49,6 +54,7 @@ final class PlayerViewModel {
         preferredSubtitleStreamFFIndex = nil
         activePartId = nil
         streamsByFFIndex = [:]
+        markers = []
         defer { isLoading = false }
 
         do {
@@ -63,6 +69,7 @@ final class PlayerViewModel {
             )
             let metadata = response.mediaContainer.metadata?.first
             media = metadata.map(MediaItem.init)
+            markers = metadata?.markers ?? []
             updatePartContext(from: metadata)
             resolvePreferredStreams(from: metadata)
             playbackURL = resolvePlaybackURL(from: metadata)
@@ -181,6 +188,10 @@ final class PlayerViewModel {
             guard let index = stream.index else { return }
             result[index] = stream
         }
+    }
+
+    private func activeMarker(where predicate: (PlexMarker) -> Bool) -> PlexMarker? {
+        markers.first { predicate($0) && $0.contains(time: position) }
     }
 
     func persistStreamSelection(for track: MPVTrack) async {

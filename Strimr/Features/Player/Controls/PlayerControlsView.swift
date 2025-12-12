@@ -14,6 +14,8 @@ struct PlayerControlsView: View {
     var onPlayPause: () -> Void
     var onSeekForward: () -> Void
     var onScrubbingChanged: (Bool) -> Void
+    var skipMarkerTitle: String?
+    var onSkipMarker: (() -> Void)?
 
     var body: some View {
         ZStack {
@@ -34,6 +36,14 @@ struct PlayerControlsView: View {
                 )
 
                 Spacer()
+
+                if let skipMarkerTitle, let onSkipMarker {
+                    HStack {
+                        Spacer()
+                        SkipMarkerButton(title: skipMarkerTitle, action: onSkipMarker)
+                    }
+                    .padding(.horizontal, 24)
+                }
                 
                 PlayerTimelineView(
                     position: $position,

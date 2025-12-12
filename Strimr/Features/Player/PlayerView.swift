@@ -24,6 +24,10 @@ struct PlayerView: View {
 
     var body: some View {
         @Bindable var bindableViewModel = viewModel
+        let activeMarker = bindableViewModel.activeSkipMarker
+        let skipTitle = activeMarker.flatMap { marker in
+            marker.isCredits ? "Skip credits" : "Skip intro"
+        }
 
         ZStack {
             Color.black.ignoresSafeArea()
@@ -69,9 +73,17 @@ struct PlayerView: View {
                     onSeekBackward: { jump(by: -seekInterval) },
                     onPlayPause: togglePlayPause,
                     onSeekForward: { jump(by: seekInterval) },
-                    onScrubbingChanged: handleScrubbing(editing:)
+                    onScrubbingChanged: handleScrubbing(editing:),
+                    skipMarkerTitle: skipTitle,
+                    onSkipMarker: activeMarker.map { marker in
+                        { skipMarker(to: marker) }
+                    }
                 )
                     .transition(.opacity)
+            }
+
+            if !controlsVisible, let activeMarker, let skipTitle {
+                skipOverlay(marker: activeMarker, title: skipTitle)
             }
         }
         .statusBarHidden()
@@ -306,6 +318,26 @@ struct PlayerView: View {
             selectedSubtitleTrackID = track.id
             coordinator.selectSubtitleTrack(id: track.id)
             appliedPreferredSubtitle = true
+        }
+    }
+
+    private func skipMarker(to marker: PlexMarker) {
+        coordinator.seek(to: marker.endTime)
+        viewModel.position = marker.endTime
+        showControls(temporarily: true)
+    }
+
+    private func skipOverlay(marker: PlexMarker, title: String) -> some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                SkipMarkerButton(title: title) {
+                    skipMarker(to: marker)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
         }
     }
 }
