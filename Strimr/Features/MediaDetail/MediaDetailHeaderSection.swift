@@ -230,7 +230,6 @@ struct MediaDetailHeaderSection: View {
         .controlSize(.large)
         .tint(.brandSecondary)
         .foregroundStyle(.brandSecondaryForeground)
-        .disabled(viewModel.primaryActionRatingKey == nil)
     }
 
     private var watchToggleButton: some View {
@@ -263,8 +262,10 @@ struct MediaDetailHeaderSection: View {
     }
 
     private func handlePlay() {
-        guard let ratingKey = viewModel.primaryActionRatingKey else { return }
-        onPlay(ratingKey)
+        Task {
+            guard let ratingKey = await viewModel.playbackRatingKey() else { return }
+            onPlay(ratingKey)
+        }
     }
 }
 
