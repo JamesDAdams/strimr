@@ -23,7 +23,13 @@ struct PlayerView: View {
     @State private var timelinePosition = 0.0
 
     private let controlsHideDelay: TimeInterval = 3.0
-    private let seekInterval: Double = 10
+    private var seekBackwardInterval: Double {
+        Double(settingsManager.playback.seekBackwardSeconds)
+    }
+
+    private var seekForwardInterval: Double {
+        Double(settingsManager.playback.seekForwardSeconds)
+    }
 
     var body: some View {
         @Bindable var bindableViewModel = viewModel
@@ -78,9 +84,11 @@ struct PlayerView: View {
                     isScrubbing: isScrubbing,
                     onDismiss: dismissPlayer,
                     onShowSettings: showSettings,
-                    onSeekBackward: { jump(by: -seekInterval) },
+                    onSeekBackward: { jump(by: -seekBackwardInterval) },
                     onPlayPause: togglePlayPause,
-                    onSeekForward: { jump(by: seekInterval) },
+                    onSeekForward: { jump(by: seekForwardInterval) },
+                    seekBackwardSeconds: settingsManager.playback.seekBackwardSeconds,
+                    seekForwardSeconds: settingsManager.playback.seekForwardSeconds,
                     onScrubbingChanged: handleScrubbing(editing:),
                     skipMarkerTitle: skipTitle,
                     onSkipMarker: activeMarker.map { marker in

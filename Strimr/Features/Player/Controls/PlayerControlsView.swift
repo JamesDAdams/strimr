@@ -15,6 +15,8 @@ struct PlayerControlsView: View {
     var onSeekBackward: () -> Void
     var onPlayPause: () -> Void
     var onSeekForward: () -> Void
+    var seekBackwardSeconds: Int
+    var seekForwardSeconds: Int
     var onScrubbingChanged: (Bool) -> Void
     var skipMarkerTitle: String?
     var onSkipMarker: (() -> Void)?
@@ -34,7 +36,9 @@ struct PlayerControlsView: View {
                     isPaused: isPaused,
                     onSeekBackward: onSeekBackward,
                     onPlayPause: onPlayPause,
-                    onSeekForward: onSeekForward
+                    onSeekForward: onSeekForward,
+                    seekBackwardSeconds: seekBackwardSeconds,
+                    seekForwardSeconds: seekForwardSeconds
                 )
 
                 Spacer()
@@ -124,24 +128,32 @@ private struct PrimaryControls: View {
     var onSeekBackward: () -> Void
     var onPlayPause: () -> Void
     var onSeekForward: () -> Void
+    var seekBackwardSeconds: Int
+    var seekForwardSeconds: Int
 
     var body: some View {
         HStack(spacing: 26) {
             PlayerIconButton(
-                systemName: "gobackward.10",
-                accessibilityLabel: "Rewind 10 seconds",
+                systemName: iconName(prefix: "gobackward", seconds: seekBackwardSeconds),
+                accessibilityLabel: "Rewind \(seekBackwardSeconds) seconds",
                 action: onSeekBackward
             )
 
             PlayPauseButton(isPaused: isPaused, action: onPlayPause)
 
             PlayerIconButton(
-                systemName: "goforward.10",
-                accessibilityLabel: "Skip forward 10 seconds",
+                systemName: iconName(prefix: "goforward", seconds: seekForwardSeconds),
+                accessibilityLabel: "Skip forward \(seekForwardSeconds) seconds",
                 action: onSeekForward
             )
         }
         .padding(.bottom, 4)
+    }
+
+    private func iconName(prefix: String, seconds: Int) -> String {
+        let supported = [5, 10, 15, 30, 45, 60]
+        guard supported.contains(seconds) else { return prefix }
+        return "\(prefix).\(seconds)"
     }
 }
 

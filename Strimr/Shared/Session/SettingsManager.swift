@@ -29,6 +29,16 @@ final class SettingsManager {
         persist()
     }
 
+    func setSeekBackwardSeconds(_ seconds: Int) {
+        settings.playback.seekBackwardSeconds = seconds
+        persist()
+    }
+
+    func setSeekForwardSeconds(_ seconds: Int) {
+        settings.playback.seekForwardSeconds = seconds
+        persist()
+    }
+
     func updatePlayback(_ transform: (inout PlaybackSettings) -> Void) {
         transform(&settings.playback)
         persist()

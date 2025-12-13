@@ -4,6 +4,9 @@
     "%lld" : {
 
     },
+    "%lld seconds" : {
+
+    },
     "Add a Plex server or pull to refresh." : {
 
     },
@@ -20,6 +23,9 @@
 
     },
     "Episode %lld" : {
+
+    },
+    "Fast forward" : {
 
     },
     "Find movies, shows, and episodes across your Plex libraries." : {
@@ -251,6 +257,9 @@
 
     },
     "Read more" : {
+
+    },
+    "Rewind" : {
 
     },
     "Search" : {
