@@ -20,6 +20,7 @@ struct PlayerView: View {
     @State private var appliedPreferredAudio = false
     @State private var appliedPreferredSubtitle = false
     @State private var appliedResumeOffset = false
+    @State private var timelinePosition = 0.0
 
     private let controlsHideDelay: TimeInterval = 3.0
     private let seekInterval: Double = 10
@@ -70,9 +71,10 @@ struct PlayerView: View {
                     isPaused: bindableViewModel.isPaused,
                     isBuffering: bindableViewModel.isBuffering,
                     supportsHDR: supportsHDR,
-                    position: positionBinding(for: bindableViewModel),
+                    position: timelineBinding,
                     duration: bindableViewModel.duration,
                     bufferedAhead: bindableViewModel.bufferedAhead,
+                    bufferBasePosition: bindableViewModel.position,
                     onDismiss: dismissPlayer,
                     onShowSettings: showSettings,
                     onSeekBackward: { jump(by: -seekInterval) },
@@ -115,6 +117,10 @@ struct PlayerView: View {
             refreshTracks()
             applyResumeOffsetIfNeeded()
         }
+        .onChange(of: bindableViewModel.position) { _, newValue in
+            guard !isScrubbing else { return }
+            timelinePosition = newValue
+        }
         .sheet(isPresented: $showingSettings) {
             PlaybackSettingsView(
                 audioTracks: settingsAudioTracks,
@@ -147,10 +153,10 @@ struct PlayerView: View {
         .padding(.bottom, 20)
     }
 
-    private func positionBinding(for viewModel: PlayerViewModel) -> Binding<Double> {
+    private var timelineBinding: Binding<Double> {
         Binding(
-            get: { viewModel.position },
-            set: { viewModel.position = $0 }
+            get: { timelinePosition },
+            set: { timelinePosition = $0 }
         )
     }
 
@@ -263,12 +269,14 @@ struct PlayerView: View {
         isScrubbing = editing
 
         if editing {
+            timelinePosition = viewModel.position
             hideControlsWorkItem?.cancel()
             withAnimation(.easeInOut) {
                 controlsVisible = true
             }
         } else {
-            coordinator.seek(to: viewModel.position)
+            coordinator.seek(to: timelinePosition)
+            viewModel.position = timelinePosition
             scheduleControlsHide()
         }
     }
@@ -329,6 +337,7 @@ struct PlayerView: View {
     private func skipMarker(to marker: PlexMarker) {
         coordinator.seek(to: marker.endTime)
         viewModel.position = marker.endTime
+        timelinePosition = marker.endTime
         showControls(temporarily: true)
     }
 

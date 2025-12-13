@@ -4,15 +4,16 @@ struct PlayerTimelineView: View {
     @Binding var position: Double
     var duration: Double?
     var bufferedAhead: Double
+    var playbackPosition: Double
     var supportsHDR: Bool
     var onEditingChanged: (Bool) -> Void
 
     private var sliderUpperBound: Double {
-        max(duration ?? 0, position, 1)
+        max(duration ?? 0, position, playbackPosition, 1)
     }
 
     private var bufferedEnd: Double {
-        let bufferedPosition = position + bufferedAhead
+        let bufferedPosition = playbackPosition + bufferedAhead
         guard let duration else { return bufferedPosition }
         return min(bufferedPosition, duration)
     }
@@ -108,6 +109,12 @@ struct PlayerTimelineView: View {
 #Preview {
     ZStack {
         Color.black.ignoresSafeArea()
-        PlayerTimelineView(position: .constant(15), duration: 60, bufferedAhead: 20, supportsHDR: true) { _ in }
+        PlayerTimelineView(
+            position: .constant(15),
+            duration: 60,
+            bufferedAhead: 20,
+            playbackPosition: 10,
+            supportsHDR: true
+        ) { _ in }
     }
 }

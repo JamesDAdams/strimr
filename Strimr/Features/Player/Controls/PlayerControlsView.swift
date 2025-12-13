@@ -8,6 +8,7 @@ struct PlayerControlsView: View {
     @Binding var position: Double
     var duration: Double?
     var bufferedAhead: Double
+    var bufferBasePosition: Double
     var onDismiss: () -> Void
     var onShowSettings: () -> Void
     var onSeekBackward: () -> Void
@@ -49,6 +50,7 @@ struct PlayerControlsView: View {
                     position: $position,
                     duration: duration,
                     bufferedAhead: bufferedAhead,
+                    playbackPosition: bufferBasePosition,
                     supportsHDR: supportsHDR,
                     onEditingChanged: onScrubbingChanged
                 )
