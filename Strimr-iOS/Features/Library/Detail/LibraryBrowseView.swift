@@ -5,7 +5,7 @@ struct LibraryBrowseView: View {
     let onSelectMedia: (MediaItem) -> Void
 
     private let gridColumns = [
-        GridItem(.adaptive(minimum: 100, maximum: 180), spacing: 12)
+        GridItem(.adaptive(minimum: 100, maximum: 180), spacing: 12),
     ]
 
     var body: some View {

@@ -11,7 +11,7 @@ struct RelatedHubsSection: View {
                 Divider()
 
                 relatedContent
-                .padding(.horizontal, 8)
+                    .padding(.horizontal, 8)
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 32)

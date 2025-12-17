@@ -49,9 +49,9 @@ struct MainTabView: View {
                         onSelectMedia: coordinator.showMediaDetail
                     )
                 }
-                    .navigationDestination(for: MainCoordinator.Route.self) { route in
-                        destination(for: route)
-                    }
+                .navigationDestination(for: MainCoordinator.Route.self) { route in
+                    destination(for: route)
+                }
             }
             .tabItem { Label("tabs.libraries", systemImage: "rectangle.stack.fill") }
             .tag(MainCoordinator.Tab.library)

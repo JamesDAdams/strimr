@@ -21,7 +21,7 @@ final class HomeViewModel {
     }
 
     func load() async {
-        guard continueWatching == nil && recentlyAdded.isEmpty else { return }
+        guard continueWatching == nil, recentlyAdded.isEmpty else { return }
         await reload()
     }
 
@@ -30,7 +30,6 @@ final class HomeViewModel {
 
         let task = Task { [weak self] in
             await self?.fetchHubs()
-            return
         }
         loadTask = task
         await task.value

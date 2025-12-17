@@ -165,7 +165,7 @@ struct PlexPartStream: Codable, Equatable, Hashable {
         case audio = 2
         case subtitle = 3
     }
-    
+
     let id: Int
     let index: Int?
     let codec: String
@@ -184,7 +184,7 @@ struct PlexPart: Codable, Equatable {
     let container: String
     let videoProfile: String?
     let stream: [PlexPartStream]?
-    
+
     private enum CodingKeys: String, CodingKey {
         case id, key, duration, file, size, container, videoProfile
         case stream = "Stream"
@@ -284,7 +284,7 @@ struct PlexItem: Codable, Equatable {
     let originalTitle: String?
     let grandparentThumb: String?
     let grandparentArt: String?
-    
+
     let onDeck: PlexOnDeck?
 
     private enum CodingKeys: String, CodingKey {
@@ -338,7 +338,7 @@ final class PlexOnDeck: Codable, Equatable {
     static func == (lhs: PlexOnDeck, rhs: PlexOnDeck) -> Bool {
         lhs.metadata == rhs.metadata
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case metadata = "Metadata"
     }

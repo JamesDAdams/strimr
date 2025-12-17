@@ -196,7 +196,7 @@ struct MediaDetailHeaderSection: View {
             colors: [
                 .white,
                 .white,
-                .clear
+                .clear,
             ],
             startPoint: .top,
             endPoint: .bottom

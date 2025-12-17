@@ -21,7 +21,7 @@ final class PlaybackRepository {
         }
 
         self.context = context
-        self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer, clientIdentifier: context.clientIdentifier)
+        network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer, clientIdentifier: context.clientIdentifier)
     }
 
     func setPreferredStreams(

@@ -50,7 +50,7 @@ struct PlayerControlsView: View {
                     }
                     .padding(.horizontal, 24)
                 }
-                
+
                 PlayerTimelineView(
                     position: $position,
                     duration: duration,
@@ -163,7 +163,7 @@ private struct PlayerControlsBackground: View {
             LinearGradient(
                 colors: [
                     .black.opacity(0.55),
-                    .clear
+                    .clear,
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -175,7 +175,7 @@ private struct PlayerControlsBackground: View {
             LinearGradient(
                 colors: [
                     .clear,
-                    .black.opacity(0.7)
+                    .black.opacity(0.7),
                 ],
                 startPoint: .top,
                 endPoint: .bottom
@@ -211,7 +211,7 @@ struct PlayerBadge: View {
             LinearGradient(
                 colors: [
                     .white.opacity(0.24),
-                    .white.opacity(0.08)
+                    .white.opacity(0.08),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

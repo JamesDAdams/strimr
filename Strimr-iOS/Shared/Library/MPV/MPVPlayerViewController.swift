@@ -1,6 +1,6 @@
 import Foundation
-import UIKit
 import Libmpv
+import UIKit
 
 // warning: metal API validation has been disabled to ignore crash when playing HDR videos.
 // Edit Scheme -> Run -> Diagnostics -> Metal API Validation -> Turn it off
@@ -10,9 +10,9 @@ final class MPVPlayerViewController: UIViewController {
     var mpv: OpaquePointer?
     var playDelegate: MPVPlayerDelegate?
     lazy var queue = DispatchQueue(label: "mpv", qos: .userInitiated)
-    
+
     var playUrl: URL?
-    var hdrAvailable : Bool = false
+    var hdrAvailable: Bool = false
     var hdrEnabled = false {
         didSet {
             // FIXME: target-colorspace-hint does not support being changed at runtime.
@@ -30,45 +30,45 @@ final class MPVPlayerViewController: UIViewController {
     deinit {
         destruct()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         metalLayer.frame = view.frame
         print(view.bounds)
         print(view.frame)
         metalLayer.contentsScale = UIScreen.main.nativeScale
         metalLayer.framebufferOnly = true
         metalLayer.backgroundColor = UIColor.black.cgColor
-        
+
         view.layer.addSublayer(metalLayer)
-        
+
         setupMpv()
-        
+
         if let url = playUrl {
             loadFile(url)
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         metalLayer.frame = view.frame
     }
-    
+
     func setupMpv() {
         mpv = mpv_create()
         guard let mpv else {
             print("failed creating context\n")
             exit(1)
         }
-        
+
         // https://mpv.io/manual/stable/#options
-#if DEBUG
-        checkError(mpv_request_log_messages(mpv, "debug"))
-#else
-        checkError(mpv_request_log_messages(mpv, "no"))
-#endif
+        #if DEBUG
+            checkError(mpv_request_log_messages(mpv, "debug"))
+        #else
+            checkError(mpv_request_log_messages(mpv, "no"))
+        #endif
         checkError(mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &metalLayer))
         checkError(mpv_set_option_string(mpv, "subs-match-os-language", "yes"))
         checkError(mpv_set_option_string(mpv, "subs-fallback", "yes"))
@@ -82,65 +82,63 @@ final class MPVPlayerViewController: UIViewController {
 //        checkError(mpv_set_option_string(mpv, "tone-mapping-visualize", "yes"))  // only for debugging purposes
 //        checkError(mpv_set_option_string(mpv, "profile", "fast"))   // can fix frame drop in poor device when play 4k
 
-        
         checkError(mpv_initialize(mpv))
-        
+
         mpv_observe_property(mpv, 0, MPVProperty.pause, MPV_FORMAT_FLAG)
         mpv_observe_property(mpv, 0, MPVProperty.videoParamsSigPeak, MPV_FORMAT_DOUBLE)
         mpv_observe_property(mpv, 0, MPVProperty.pausedForCache, MPV_FORMAT_FLAG)
         mpv_observe_property(mpv, 0, MPVProperty.timePos, MPV_FORMAT_DOUBLE)
         mpv_observe_property(mpv, 0, MPVProperty.duration, MPV_FORMAT_DOUBLE)
         mpv_observe_property(mpv, 0, MPVProperty.demuxerCacheDuration, MPV_FORMAT_DOUBLE)
-        mpv_set_wakeup_callback(mpv, { (ctx) in
+        mpv_set_wakeup_callback(mpv, { ctx in
             let client = unsafeBitCast(ctx, to: MPVPlayerViewController.self)
             client.readEvents()
         }, UnsafeMutableRawPointer(Unmanaged.passUnretained(self).toOpaque()))
 
         setupNotification()
     }
-    
-    public func setupNotification() {
+
+    func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(enterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(enterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
-    
-    @objc public func enterBackground() {
+
+    @objc func enterBackground() {
         // fix black screen issue when app enter foreground again
         guard let mpv else { return }
         pause()
         checkError(mpv_set_option_string(mpv, "vid", "no"))
     }
-    
-    @objc public func enterForeground() {
+
+    @objc func enterForeground() {
         guard let mpv else { return }
         checkError(mpv_set_option_string(mpv, "vid", "auto"))
         play()
     }
-    
-    
+
     func loadFile(
         _ url: URL
     ) {
         var args = [url.absoluteString]
         var options = [String]()
-        
+
         args.append("replace")
-        
+
         if !options.isEmpty {
             args.append(options.joined(separator: ","))
         }
-        
+
         command("loadfile", args: args)
     }
-    
+
     func togglePause() {
         getFlag(MPVProperty.pause) ? play() : pause()
     }
-    
+
     func play() {
         setFlag(MPVProperty.pause, false)
     }
-    
+
     func pause() {
         setFlag(MPVProperty.pause, true)
     }
@@ -156,7 +154,7 @@ final class MPVPlayerViewController: UIViewController {
             args: [
                 String(delta),
                 "relative",
-                "exact"
+                "exact",
             ]
         )
     }
@@ -179,7 +177,7 @@ final class MPVPlayerViewController: UIViewController {
         guard node.format == MPV_FORMAT_NODE_ARRAY, let list = node.u.list?.pointee else { return [] }
 
         var tracks: [MPVTrack] = []
-        for index in 0..<Int(list.num) {
+        for index in 0 ..< Int(list.num) {
             let entry = list.values[index]
             guard entry.format == MPV_FORMAT_NODE_MAP, let map = entry.u.list?.pointee else { continue }
             let values = parseMap(map)
@@ -208,14 +206,14 @@ final class MPVPlayerViewController: UIViewController {
 
         return tracks
     }
-    
+
     private func getDouble(_ name: String) -> Double {
         guard let mpv else { return 0.0 }
         var data = Double()
         mpv_get_property(mpv, name, MPV_FORMAT_DOUBLE, &data)
         return data
     }
-    
+
     private func getString(_ name: String) -> String? {
         guard let mpv else { return nil }
         let cstr = mpv_get_property_string(mpv, name)
@@ -223,14 +221,14 @@ final class MPVPlayerViewController: UIViewController {
         mpv_free(cstr)
         return str
     }
-    
+
     private func getFlag(_ name: String) -> Bool {
         guard let mpv else { return false }
         var data = Int64()
         mpv_get_property(mpv, name, MPV_FORMAT_FLAG, &data)
         return data > 0
     }
-    
+
     private func setFlag(_ name: String, _ flag: Bool) {
         guard let mpv else { return }
         var data: Int = flag ? 1 : 0
@@ -247,8 +245,7 @@ final class MPVPlayerViewController: UIViewController {
         let value = trackID.map(String.init) ?? "no"
         command("set", args: [name, value])
     }
-    
-    
+
     func command(
         _ command: String,
         args: [String?] = [],
@@ -264,7 +261,7 @@ final class MPVPlayerViewController: UIViewController {
                 free(UnsafeMutablePointer(mutating: ptr!))
             }
         }
-        //print("\(command) -- \(args)")
+        // print("\(command) -- \(args)")
         let returnValue = mpv_command(mpv, &cargs)
         if checkForErrors {
             checkError(returnValue)
@@ -278,25 +275,25 @@ final class MPVPlayerViewController: UIViewController {
         if !args.isEmpty, args.last == nil {
             fatalError("Command do not need a nil suffix")
         }
-        
+
         var strArgs = args
         strArgs.insert(command, at: 0)
         strArgs.append(nil)
-        
+
         return strArgs
     }
-    
+
     func readEvents() {
         queue.async { [weak self] in
             guard let self else { return }
-            
+
             while true {
                 guard let mpv = self.mpv else { break }
                 let event = mpv_wait_event(mpv, 0)
                 if event?.pointee.event_id == MPV_EVENT_NONE {
                     break
                 }
-                
+
                 switch event!.pointee.event_id {
                 case MPV_EVENT_PROPERTY_CHANGE:
                     let dataOpaquePtr = OpaquePointer(event!.pointee.data)
@@ -340,17 +337,15 @@ final class MPVPlayerViewController: UIViewController {
                         }
                     }
                 case MPV_EVENT_SHUTDOWN:
-                    print("event: shutdown\n");
+                    print("event: shutdown\n")
                     destruct()
-                    break
                 case MPV_EVENT_LOG_MESSAGE:
                     let msg = UnsafeMutablePointer<mpv_event_log_message>(OpaquePointer(event!.pointee.data))
                     print("[\(String(cString: (msg!.pointee.prefix)!))] \(String(cString: (msg!.pointee.level)!)): \(String(cString: (msg!.pointee.text)!))", terminator: "")
                 default:
-                    let eventName = mpv_event_name(event!.pointee.event_id )
-                    print("event: \(String(cString: (eventName)!))");
+                    let eventName = mpv_event_name(event!.pointee.event_id)
+                    print("event: \(String(cString: eventName!))")
                 }
-                
             }
         }
     }
@@ -373,7 +368,7 @@ final class MPVPlayerViewController: UIViewController {
     private func parseMap(_ map: mpv_node_list) -> [String: Any] {
         var values: [String: Any] = [:]
 
-        for index in 0..<Int(map.num) {
+        for index in 0 ..< Int(map.num) {
             guard let keyPointer = map.keys?[index] else { continue }
             let key = String(cString: keyPointer)
             let valueNode = map.values[index]
@@ -402,5 +397,4 @@ final class MPVPlayerViewController: UIViewController {
             print("MPV API error: \(String(cString: mpv_error_string(status)))\n")
         }
     }
-    
 }

@@ -18,10 +18,11 @@ final class PlayerViewModel {
     var resumePosition: Double? {
         media?.viewOffset
     }
+
     var markers: [PlexMarker] = []
     var activeSkipMarker: PlexMarker? {
         activeMarker(where: \.isIntro)
-        ?? activeMarker(where: \.isCredits)
+            ?? activeMarker(where: \.isCredits)
     }
 
     @ObservationIgnored private let timelineInterval: TimeInterval = 10
@@ -31,7 +32,7 @@ final class PlayerViewModel {
     @ObservationIgnored private let context: PlexAPIContext
     @ObservationIgnored private var activePartId: Int?
     @ObservationIgnored private var streamsByFFIndex: [Int: PlexPartStream] = [:]
-    
+
     func plexStream(forFFIndex ffIndex: Int?) -> PlexPartStream? {
         guard let ffIndex else { return nil }
         return streamsByFFIndex[ffIndex]
@@ -116,7 +117,7 @@ final class PlayerViewModel {
 
     func markPlaybackFinished() async {
         let currentDuration = max(0, Int((media?.duration ?? duration ?? position) * 1000))
-        
+
         do {
             let repository = try PlaybackRepository(context: context)
             try await repository.updateTimeline(

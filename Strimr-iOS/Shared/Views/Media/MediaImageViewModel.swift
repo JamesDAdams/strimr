@@ -12,22 +12,21 @@ final class MediaImageViewModel {
     @ObservationIgnored private let context: PlexAPIContext
     var artworkKind: ArtworkKind
     var media: MediaItem
-    private(set) var imageURL: URL? = nil
-
+    private(set) var imageURL: URL?
 
     init(context: PlexAPIContext, artworkKind: ArtworkKind, media: MediaItem) {
         self.context = context
         self.artworkKind = artworkKind
         self.media = media
     }
-    
+
     func load() async {
         let path: String?
         switch artworkKind {
         case .thumb:
             path = media.grandparentThumbPath ?? media.parentThumbPath ?? media.thumbPath
         case .art:
-            path = media.grandparentArtPath  ?? media.artPath
+            path = media.grandparentArtPath ?? media.artPath
         }
 
         guard let path else {

@@ -19,20 +19,20 @@ final class HubRepository {
             ].compactMap { $0 }
         }
     }
-    
+
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
             throw PlexAPIError.missingConnection
         }
-        
+
         guard let authToken = context.authTokenServer else {
             throw PlexAPIError.missingAuthToken
         }
-        
+
         self.context = context
-        self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
+        network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
     }
-    
+
     func getContinueWatchingHub(params: HubParams? = nil) async throws -> PlexHubMediaContainer {
         let resolved = params ?? HubParams()
         return try await network.request(path: "/hubs/continueWatching", queryItems: resolved.queryItems)
@@ -62,7 +62,7 @@ final class HubRepository {
             ]
         )
     }
-    
+
     func getRelatedMediaHubs(ratingKey: String) async throws -> PlexHubMediaContainer {
         try await network.request(path: "/library/metadata/\(ratingKey)/related")
     }

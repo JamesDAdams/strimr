@@ -5,12 +5,12 @@ final class PlexCloudNetworkClient {
     private let baseURL = URL(string: "https://plex.tv/api/v2")!
     private var authToken: String?
     private var clientIdentifier: String
-    
+
     init(authToken: String?, clientIdentifier: String) {
         self.authToken = authToken
         self.clientIdentifier = clientIdentifier
     }
-    
+
     func request<Response: Decodable>(
         path: String,
         method: String,

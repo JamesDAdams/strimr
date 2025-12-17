@@ -13,7 +13,7 @@ final class ProfileSwitcherViewModel {
     @ObservationIgnored private let sessionManager: SessionManager
 
     init(context: PlexAPIContext, sessionManager: SessionManager) {
-        self.userRepository = UserRepository(context: context)
+        userRepository = UserRepository(context: context)
         self.sessionManager = sessionManager
     }
 
@@ -48,7 +48,7 @@ final class ProfileSwitcherViewModel {
     func switchToUser(_ user: PlexHomeUser, pin: String?) async {
         guard switchingUserUUID == nil else { return }
 
-        if requiresPin(for: user) && (pin?.isEmpty ?? true) {
+        if requiresPin(for: user), pin?.isEmpty ?? true {
             errorMessage = String(localized: "auth.profile.error.pinRequired")
             return
         }

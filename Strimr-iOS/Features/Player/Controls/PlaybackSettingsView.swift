@@ -71,7 +71,7 @@ struct PlaybackSettingsTrack: Identifiable, Hashable {
 
     var title: String {
         guard plexStream != nil else { return track.displayName }
-        
+
         if let plexDisplayTitle = plexStream?.displayTitle, !plexDisplayTitle.isEmpty {
             switch track.type {
             case .subtitle:
@@ -83,7 +83,7 @@ struct PlaybackSettingsTrack: Identifiable, Hashable {
                 return plexDisplayTitle
             }
         }
-        
+
         return track.displayName
     }
 

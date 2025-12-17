@@ -38,7 +38,6 @@ struct MediaCarousel: View {
         sizeClass: UserInterfaceSizeClass?
     ) -> CGFloat {
         switch layout {
-
         case .portrait:
             if sizeClass == .compact {
                 return 120

@@ -42,10 +42,10 @@ struct PlayerTimelineView: View {
                     PlayerBadge(String(localized: "player.badge.hdr"), systemImage: "sparkles")
                 }
             }
-            
+
             ZStack {
                 bufferTrack
-                Slider(value: sliderBinding, in: 0...sliderUpperBound, onEditingChanged: onEditingChanged)
+                Slider(value: sliderBinding, in: 0 ... sliderUpperBound, onEditingChanged: onEditingChanged)
                     .tint(.white)
                     .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 8)
             }

@@ -15,7 +15,7 @@ final class ScrobbleRepository {
 
         network = PlexServerNetworkClient(
             authToken: authToken,
-            baseURL: baseURLServer,
+            baseURL: baseURLServer
         )
     }
 

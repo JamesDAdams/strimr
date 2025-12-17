@@ -60,52 +60,52 @@ struct SeasonEpisodesSection: View {
 
     @ViewBuilder
     private var seasonPickerControl: some View {
-#if os(tvOS)
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                ForEach(viewModel.seasons, id: \.id) { season in
-                    let isSelected = season.id == (viewModel.selectedSeasonId ?? viewModel.seasons.first?.id)
-                    Button {
-                        Task {
-                            await viewModel.selectSeason(id: season.id)
+        #if os(tvOS)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    ForEach(viewModel.seasons, id: \.id) { season in
+                        let isSelected = season.id == (viewModel.selectedSeasonId ?? viewModel.seasons.first?.id)
+                        Button {
+                            Task {
+                                await viewModel.selectSeason(id: season.id)
+                            }
+                        } label: {
+                            Text(season.title)
+                                .font(.callout)
+                                .fontWeight(.semibold)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 10)
+                                .frame(minWidth: 140)
+                                .background(isSelected ? Color.brandSecondary : Color.white.opacity(0.18))
+                                .foregroundStyle(isSelected ? .brandSecondaryForeground : .primary)
+                                .clipShape(Capsule())
                         }
-                    } label: {
-                        Text(season.title)
-                            .font(.callout)
-                            .fontWeight(.semibold)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 10)
-                            .frame(minWidth: 140)
-                            .background(isSelected ? Color.brandSecondary : Color.white.opacity(0.18))
-                            .foregroundStyle(isSelected ? .brandSecondaryForeground : .primary)
-                            .clipShape(Capsule())
+                        .buttonStyle(.plain)
+                        .focusable(true)
                     }
-                    .buttonStyle(.plain)
-                    .focusable(true)
+                }
+                .padding(.vertical, 4)
+            }
+        #else
+            Picker("media.detail.season", selection: Binding(
+                get: { viewModel.selectedSeasonId ?? viewModel.seasons.first?.id ?? "" },
+                set: { seasonId in
+                    guard !seasonId.isEmpty else { return }
+                    Task {
+                        await viewModel.selectSeason(id: seasonId)
+                    }
+                }
+            )) {
+                ForEach(viewModel.seasons, id: \.id) { season in
+                    Text(season.title)
+                        .tag(season.id)
                 }
             }
-            .padding(.vertical, 4)
-        }
-#else
-        Picker("media.detail.season", selection: Binding(
-            get: { viewModel.selectedSeasonId ?? viewModel.seasons.first?.id ?? "" },
-            set: { seasonId in
-                guard !seasonId.isEmpty else { return }
-                Task {
-                    await viewModel.selectSeason(id: seasonId)
-                }
-            }
-        )) {
-            ForEach(viewModel.seasons, id: \.id) { season in
-                Text(season.title)
-                    .tag(season.id)
-            }
-        }
-        .pickerStyle(.menu)
-        .tint(.brandSecondaryForeground)
-        .background(.brandSecondary)
-        .cornerRadius(12)
-#endif
+            .pickerStyle(.menu)
+            .tint(.brandSecondaryForeground)
+            .background(.brandSecondary)
+            .cornerRadius(12)
+        #endif
     }
 
     @ViewBuilder
@@ -172,16 +172,40 @@ struct SeasonEpisodesSection: View {
 
     @ViewBuilder
     private var episodeList: some View {
-#if os(tvOS)
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(alignment: .top, spacing: 20) {
+        #if os(tvOS)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(alignment: .top, spacing: 20) {
+                    ForEach(viewModel.episodes) { episode in
+                        EpisodeCardView(
+                            episode: episode,
+                            imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
+                            runtime: viewModel.runtimeText(for: episode),
+                            progress: viewModel.progressFraction(for: episode),
+                            cardWidth: 520,
+                            isWatched: viewModel.isWatched(episode),
+                            isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
+                            onToggleWatch: {
+                                Task {
+                                    await viewModel.toggleWatchStatus(for: episode)
+                                }
+                            },
+                            onPlay: {
+                                onPlay(episode.id)
+                            }
+                        )
+                    }
+                }
+                .padding(.horizontal, 4)
+            }
+        #elseif os(macOS)
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 420, maximum: 520), spacing: 16)], spacing: 16) {
                 ForEach(viewModel.episodes) { episode in
                     EpisodeCardView(
                         episode: episode,
                         imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
                         runtime: viewModel.runtimeText(for: episode),
                         progress: viewModel.progressFraction(for: episode),
-                        cardWidth: 520,
+                        cardWidth: nil,
                         isWatched: viewModel.isWatched(episode),
                         isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
                         onToggleWatch: {
@@ -195,57 +219,33 @@ struct SeasonEpisodesSection: View {
                     )
                 }
             }
-            .padding(.horizontal, 4)
-        }
-#elseif os(macOS)
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 420, maximum: 520), spacing: 16)], spacing: 16) {
-            ForEach(viewModel.episodes) { episode in
-                EpisodeCardView(
-                    episode: episode,
-                    imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
-                    runtime: viewModel.runtimeText(for: episode),
-                    progress: viewModel.progressFraction(for: episode),
-                    cardWidth: nil,
-                    isWatched: viewModel.isWatched(episode),
-                    isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
-                    onToggleWatch: {
-                        Task {
-                            await viewModel.toggleWatchStatus(for: episode)
+        #else
+            LazyVStack(alignment: .leading, spacing: 8) {
+                ForEach(Array(viewModel.episodes.enumerated()), id: \.element.id) { index, episode in
+                    EpisodeCardView(
+                        episode: episode,
+                        imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
+                        runtime: viewModel.runtimeText(for: episode),
+                        progress: viewModel.progressFraction(for: episode),
+                        cardWidth: nil,
+                        isWatched: viewModel.isWatched(episode),
+                        isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
+                        onToggleWatch: {
+                            Task {
+                                await viewModel.toggleWatchStatus(for: episode)
+                            }
+                        },
+                        onPlay: {
+                            onPlay(episode.id)
                         }
-                    },
-                    onPlay: {
-                        onPlay(episode.id)
+                    )
+                    if index < viewModel.episodes.count - 1 {
+                        Divider()
+                            .background(.brandSecondary)
+                            .padding(.vertical, 4)
                     }
-                )
-            }
-        }
-#else
-        LazyVStack(alignment: .leading, spacing: 8) {
-            ForEach(Array(viewModel.episodes.enumerated()), id: \.element.id) { index, episode in
-                EpisodeCardView(
-                    episode: episode,
-                    imageURL: viewModel.imageURL(for: episode, width: 640, height: 360),
-                    runtime: viewModel.runtimeText(for: episode),
-                    progress: viewModel.progressFraction(for: episode),
-                    cardWidth: nil,
-                    isWatched: viewModel.isWatched(episode),
-                    isUpdatingWatchStatus: viewModel.isUpdatingWatchStatus(for: episode),
-                    onToggleWatch: {
-                        Task {
-                            await viewModel.toggleWatchStatus(for: episode)
-                        }
-                    },
-                    onPlay: {
-                        onPlay(episode.id)
-                    }
-                )
-                if index < viewModel.episodes.count - 1 {
-                    Divider()
-                        .background(.brandSecondary)
-                        .padding(.vertical, 4)
                 }
             }
-        }
-#endif
+        #endif
     }
 }

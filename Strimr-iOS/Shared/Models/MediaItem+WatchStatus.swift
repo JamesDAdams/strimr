@@ -16,7 +16,8 @@ extension MediaItem {
     var remainingUnwatchedLeaves: Int? {
         guard [.show, .season].contains(type),
               let leafCount,
-              let viewedLeafCount else {
+              let viewedLeafCount
+        else {
             return nil
         }
 

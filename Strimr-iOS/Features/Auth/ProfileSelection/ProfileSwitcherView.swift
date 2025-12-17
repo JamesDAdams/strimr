@@ -169,7 +169,6 @@ struct ProfileSwitcherView: View {
                         .foregroundStyle(.white.opacity(0.6))
                         .lineLimit(1)
                 }
-
             }
             .frame(maxWidth: .infinity)
         }

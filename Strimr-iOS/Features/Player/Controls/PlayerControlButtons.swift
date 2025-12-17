@@ -15,7 +15,7 @@ struct PlayerIconButton: View {
                     LinearGradient(
                         colors: [
                             .white.opacity(0.18),
-                            .white.opacity(0.08)
+                            .white.opacity(0.08),
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -46,7 +46,7 @@ struct PlayPauseButton: View {
                     LinearGradient(
                         colors: [
                             Color.white,
-                            Color.white.opacity(0.85)
+                            Color.white.opacity(0.85),
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -85,7 +85,7 @@ struct SkipMarkerButton: View {
                 LinearGradient(
                     colors: [
                         Color.white,
-                        Color.white.opacity(0.9)
+                        Color.white.opacity(0.9),
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing

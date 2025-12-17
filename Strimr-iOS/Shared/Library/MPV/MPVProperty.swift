@@ -1,6 +1,6 @@
 import Foundation
 
-struct MPVProperty {
+enum MPVProperty {
     static let videoParamsColormatrix = "video-params/colormatrix"
     static let videoParamsColorlevels = "video-params/colorlevels"
     static let videoParamsPrimaries = "video-params/primaries"

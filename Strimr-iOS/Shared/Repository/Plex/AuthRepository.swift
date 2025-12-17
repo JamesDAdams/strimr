@@ -3,12 +3,12 @@ import Foundation
 final class AuthRepository {
     private let network: PlexCloudNetworkClient
     private weak var context: PlexAPIContext?
-    
+
     init(context: PlexAPIContext) {
         self.context = context
-        self.network = PlexCloudNetworkClient(authToken: context.authTokenCloud, clientIdentifier: context.clientIdentifier)
+        network = PlexCloudNetworkClient(authToken: context.authTokenCloud, clientIdentifier: context.clientIdentifier)
     }
-    
+
     func requestPin() async throws -> PlexCloudPin {
         try await network.request(
             path: "/pins",

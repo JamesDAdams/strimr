@@ -4,21 +4,21 @@ final class ImageRepository {
     private weak var context: PlexAPIContext?
     private let baseURL: URL
     private let authToken: String
-    
+
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
             throw PlexAPIError.missingConnection
         }
-        
+
         guard let authToken = context.authTokenServer else {
             throw PlexAPIError.missingAuthToken
         }
-        
+
         self.context = context
-        self.baseURL = baseURLServer
+        baseURL = baseURLServer
         self.authToken = authToken
     }
-    
+
     func transcodeImageURL(
         path: String,
         width: Int = 240,

@@ -17,20 +17,20 @@ final class SectionRepository {
             ].compactMap { $0 }
         }
     }
-    
+
     init(context: PlexAPIContext) throws {
         guard let baseURLServer = context.baseURLServer else {
             throw PlexAPIError.missingConnection
         }
-        
+
         guard let authToken = context.authTokenServer else {
             throw PlexAPIError.missingAuthToken
         }
-        
+
         self.context = context
-        self.network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
+        network = PlexServerNetworkClient(authToken: authToken, baseURL: baseURLServer)
     }
-    
+
     func getSections() async throws -> PlexSectionMediaContainer {
         try await network.request(path: "/library/sections/all")
     }

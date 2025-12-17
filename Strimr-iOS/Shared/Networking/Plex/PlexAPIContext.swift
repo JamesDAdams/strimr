@@ -35,7 +35,7 @@ final class PlexAPIContext {
         try keychain.setString(identifier, forKey: clientIdKey)
         return identifier
     }
-    
+
     func setAuthToken(_ token: String) {
         authTokenCloud = token
     }
@@ -44,7 +44,7 @@ final class PlexAPIContext {
         self.resource = resource
         baseURLServer = nil
         authTokenServer = resource.accessToken
-        
+
         try await ensureConnection()
     }
 
@@ -69,7 +69,7 @@ final class PlexAPIContext {
         baseURLServer = connection.uri
         return connection.uri
     }
-    
+
     private func resolveConnection(using resource: PlexCloudResource) async throws -> PlexCloudResource.Connection? {
         let sortedConnections = resource.connections.sorted { lhs, rhs in
             if lhs.isRelay != rhs.isRelay {
@@ -105,7 +105,7 @@ final class PlexAPIContext {
             return false
         }
     }
-    
+
     func reset() {
         resource = nil
         authTokenCloud = nil

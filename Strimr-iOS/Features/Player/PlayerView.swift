@@ -97,7 +97,7 @@ struct PlayerView: View {
                         { skipMarker(to: marker) }
                     }
                 )
-                    .transition(.opacity)
+                .transition(.opacity)
             }
 
             if !controlsVisible, let activeMarker, let skipTitle {
@@ -150,12 +150,12 @@ struct PlayerView: View {
     private var bufferingOverlay: some View {
         VStack {
             Spacer()
-            
+
             HStack(spacing: 8) {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .tint(.white)
-                
+
                 Text("player.status.buffering")
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(.white.opacity(0.9))
@@ -212,12 +212,14 @@ struct PlayerView: View {
                 applyPreferredTracksIfNeeded(audioTracks: audio, subtitleTracks: subtitles)
 
                 if selectedAudioTrackID == nil,
-                   let activeAudio = audio.first(where: { $0.isSelected })?.id ?? audioTracks.first?.id {
+                   let activeAudio = audio.first(where: { $0.isSelected })?.id ?? audioTracks.first?.id
+                {
                     selectedAudioTrackID = activeAudio
                 }
 
                 if selectedSubtitleTrackID == nil,
-                   let activeSubtitle = subtitles.first(where: { $0.isSelected })?.id {
+                   let activeSubtitle = subtitles.first(where: { $0.isSelected })?.id
+                {
                     selectedSubtitleTrackID = activeSubtitle
                 }
             }
@@ -297,7 +299,7 @@ struct PlayerView: View {
             controlsVisible = true
         }
 
-        if temporarily && !isScrubbing {
+        if temporarily, !isScrubbing {
             scheduleControlsHide()
         } else {
             hideControlsWorkItem?.cancel()
@@ -327,7 +329,8 @@ struct PlayerView: View {
     private func applyPreferredTracksIfNeeded(audioTracks: [MPVTrack], subtitleTracks: [MPVTrack]) {
         if !appliedPreferredAudio,
            let preferredAudioIndex = viewModel.preferredAudioStreamFFIndex,
-           let track = audioTracks.first(where: { $0.ffIndex == preferredAudioIndex }) {
+           let track = audioTracks.first(where: { $0.ffIndex == preferredAudioIndex })
+        {
             selectedAudioTrackID = track.id
             coordinator.selectAudioTrack(id: track.id)
             appliedPreferredAudio = true
@@ -335,10 +338,10 @@ struct PlayerView: View {
 
         if !appliedPreferredSubtitle,
            let preferredSubtitleIndex = viewModel.preferredSubtitleStreamFFIndex,
-           let track = subtitleTracks.first(where: { $0.ffIndex == preferredSubtitleIndex }) {
-            
+           let track = subtitleTracks.first(where: { $0.ffIndex == preferredSubtitleIndex })
+        {
             debugPrint(preferredSubtitleIndex)
-            
+
             selectedSubtitleTrackID = track.id
             coordinator.selectSubtitleTrack(id: track.id)
             appliedPreferredSubtitle = true

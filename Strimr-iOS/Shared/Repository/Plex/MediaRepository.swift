@@ -13,7 +13,7 @@ final class MediaRepository {
             throw PlexAPIError.missingAuthToken
         }
 
-        self.baseURL = baseURLServer
+        baseURL = baseURLServer
         self.authToken = authToken
     }
 
@@ -22,7 +22,7 @@ final class MediaRepository {
         let normalizedPath = path.hasPrefix("/") ? path : "/\(path)"
         components?.path = normalizedPath
         components?.queryItems = [
-            URLQueryItem(name: "X-Plex-Token", value: authToken)
+            URLQueryItem(name: "X-Plex-Token", value: authToken),
         ]
         return components?.url
     }
