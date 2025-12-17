@@ -14,6 +14,7 @@ class MetalLayer: CAMetalLayer {
         }
     }
 
+    #if !os(tvOS)
     // Hack for fix [target-colorspace-hint] option:
     // Update wantsExtendedDynamicRangeContent need run in main thread to activate screen EDR mode, other thread can't activate
     override var wantsExtendedDynamicRangeContent: Bool {
@@ -30,4 +31,5 @@ class MetalLayer: CAMetalLayer {
             }
         }
     }
+    #endif
 }

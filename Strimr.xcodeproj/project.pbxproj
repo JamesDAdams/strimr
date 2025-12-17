@@ -39,17 +39,42 @@
 			);
 			target = E98A13B82ED8CBAD002F98B2 /* Strimr-iOS */;
 		};
-		E9C449042EF3193800D2895B /* Exceptions for "Strimr-tvOS" folder in "Strimr-iOS" target */ = {
+		E9C449F82EF322DE00D2895B /* Exceptions for "Shared" folder in "Strimr-tvOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Features/Auth/SignInTVView.swift,
-			);
-			target = E98A13B82ED8CBAD002F98B2 /* Strimr-iOS */;
-		};
-		E9C449052EF3193800D2895B /* Exceptions for "Strimr-tvOS" folder in "Strimr-tvOS" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Features/Auth/SignInTVView.swift,
+				Library/MPV/MetalLayer.swift,
+				Library/MPV/MPVPlayerDelegate.swift,
+				Library/MPV/MPVPlayerView.swift,
+				Library/MPV/MPVPlayerViewController.swift,
+				Library/MPV/MPVProperty.swift,
+				Library/MPV/MPVTrack.swift,
+				Models/AppSettings.swift,
+				Models/Hub.swift,
+				"Models/Hub+Mapping.swift",
+				Models/Library.swift,
+				Models/MediaItem.swift,
+				"Models/MediaItem+Mapping.swift",
+				"Models/MediaItem+WatchStatus.swift",
+				Models/PlexCloudModels.swift,
+				Models/PlexMediaModels.swift,
+				Networking/Plex/PlexAPI.swift,
+				Networking/Plex/PlexAPIContext.swift,
+				Networking/Plex/PlexCloudNetworkClient.swift,
+				Networking/Plex/PlexServerNetworkClient.swift,
+				Repository/Plex/AuthRepository.swift,
+				Repository/Plex/HubRepository.swift,
+				Repository/Plex/ImageRepository.swift,
+				Repository/Plex/MediaRepository.swift,
+				Repository/Plex/MetadataRepository.swift,
+				Repository/Plex/PlaybackRepository.swift,
+				Repository/Plex/ResourceRepository.swift,
+				Repository/Plex/ScrobbleRepository.swift,
+				Repository/Plex/SearchRepository.swift,
+				Repository/Plex/SectionRepository.swift,
+				Repository/Plex/UserRepository.swift,
+				Session/SessionManager.swift,
+				Session/SettingsManager.swift,
+				Storage/Keychain.swift,
 			);
 			target = E9C448F22EF3034900D2895B /* Strimr-tvOS */;
 		};
@@ -66,15 +91,14 @@
 		};
 		E9C448F42EF3034900D2895B /* Strimr-tvOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E9C449042EF3193800D2895B /* Exceptions for "Strimr-tvOS" folder in "Strimr-iOS" target */,
-				E9C449052EF3193800D2895B /* Exceptions for "Strimr-tvOS" folder in "Strimr-tvOS" target */,
-			);
 			path = "Strimr-tvOS";
 			sourceTree = "<group>";
 		};
 		E9C449012EF30A9500D2895B /* Shared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E9C449F82EF322DE00D2895B /* Exceptions for "Shared" folder in "Strimr-tvOS" target */,
+			);
 			path = Shared;
 			sourceTree = "<group>";
 		};
