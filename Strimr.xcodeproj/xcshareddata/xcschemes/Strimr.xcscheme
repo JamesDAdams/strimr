@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E98A13B82ED8CBAD002F98B2"
-               BuildableName = "Strimr.app"
-               BlueprintName = "Strimr"
+               BuildableName = "Strimr-iOS.app"
+               BlueprintName = "Strimr-iOS"
                ReferencedContainer = "container:Strimr.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E98A13B82ED8CBAD002F98B2"
-            BuildableName = "Strimr.app"
-            BlueprintName = "Strimr"
+            BuildableName = "Strimr-iOS.app"
+            BlueprintName = "Strimr-iOS"
             ReferencedContainer = "container:Strimr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E98A13B82ED8CBAD002F98B2"
-            BuildableName = "Strimr.app"
-            BlueprintName = "Strimr"
+            BuildableName = "Strimr-iOS.app"
+            BlueprintName = "Strimr-iOS"
             ReferencedContainer = "container:Strimr.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
