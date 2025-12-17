@@ -482,23 +482,6 @@
         }
       }
     },
-    "Settings will be available here soon." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings will be available here soon."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les paramètres seront bientôt disponibles ici."
-          }
-        }
-      }
-    },
     "Show less" : {
 
     },
@@ -771,6 +754,9 @@
 
     },
     "Who's watching?" : {
+
+    },
+    "You will need to sign in again." : {
 
     }
   },

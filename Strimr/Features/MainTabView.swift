@@ -63,9 +63,6 @@ struct MainTabView: View {
                     },
                     onSwitchServer: {
                         Task { await sessionManager.requestServerSelection() }
-                    },
-                    onLogout: {
-                        Task { await sessionManager.signOut() }
                     }
                 )
                 .navigationDestination(for: MoreRoute.self) { route in

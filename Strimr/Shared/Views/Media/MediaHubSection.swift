@@ -16,9 +16,9 @@ struct MediaHubSection<Content: View>: View {
                     .fill(Color.brandPrimary)
                     .frame(width: 3, height: 18)
                 Text(title.uppercased())
-                    .font(.caption)
+                    .font(.headline)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.brandSecondary)
             }
             .padding(.horizontal, 2)
 
