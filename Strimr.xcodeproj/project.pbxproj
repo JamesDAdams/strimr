@@ -10,6 +10,7 @@
 		E97F3FC32ED9E12000CA6E05 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */; };
 		E9C449002EF3063500D2895B /* MPVKit-GPL in Frameworks */ = {isa = PBXBuildFile; productRef = E9C448FF2EF3063500D2895B /* MPVKit-GPL */; };
 		E9E487BB2EE4E664009184C1 /* MPVKit-GPL in Frameworks */ = {isa = PBXBuildFile; productRef = E9E487BA2EE4E664009184C1 /* MPVKit-GPL */; };
+		E9E4DB4F2EF4534E0035147A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -270,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9E4DB4F2EF4534E0035147A /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

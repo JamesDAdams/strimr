@@ -67,7 +67,6 @@ struct MainTabTVView: View {
                             .padding()
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.brandSecondary)
 
                     Button(role: .destructive) {
                         Task { await sessionManager.signOut() }
