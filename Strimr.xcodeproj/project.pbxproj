@@ -42,6 +42,8 @@
 		E9C449F82EF322DE00D2895B /* Exceptions for "Shared" folder in "Strimr-tvOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Features/Auth/ProfileSelection/ProfileSwitcherViewModel.swift,
+				Features/Auth/ServerSelection/ServerSelectionViewModel.swift,
 				Library/MPV/MetalLayer.swift,
 				Library/MPV/MPVPlayerDelegate.swift,
 				Library/MPV/MPVPlayerView.swift,
@@ -78,6 +80,13 @@
 			);
 			target = E9C448F22EF3034900D2895B /* Strimr-tvOS */;
 		};
+		E9E4DB4E2EF44D900035147A /* Exceptions for "Strimr-tvOS" folder in "Strimr-tvOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E9C448F22EF3034900D2895B /* Strimr-tvOS */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -91,6 +100,9 @@
 		};
 		E9C448F42EF3034900D2895B /* Strimr-tvOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E9E4DB4E2EF44D900035147A /* Exceptions for "Strimr-tvOS" folder in "Strimr-tvOS" target */,
+			);
 			path = "Strimr-tvOS";
 			sourceTree = "<group>";
 		};
@@ -496,6 +508,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Strimr-tvOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Strimr;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
@@ -527,6 +540,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Strimr-tvOS/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Strimr;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;

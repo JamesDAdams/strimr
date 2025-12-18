@@ -1,17 +1,53 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(SessionManager.self) private var sessionManager
+    @Environment(PlexAPIContext.self) private var plexApiContext
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Color("Background").ignoresSafeArea()
+
+            switch sessionManager.status {
+            case .hydrating:
+                ProgressView("loading")
+                    .progressViewStyle(.circular)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            case .signedOut:
+                SignInTVView(
+                    viewModel: SignInTVViewModel(
+                        sessionManager: sessionManager,
+                        context: plexApiContext
+                    )
+                )
+            case .needsProfileSelection:
+                NavigationStack {
+                    ProfileSwitcherTVView(
+                        viewModel: ProfileSwitcherViewModel(
+                            context: plexApiContext,
+                            sessionManager: sessionManager
+                        )
+                    )
+                }
+            case .needsServerSelection:
+                NavigationStack {
+                    SelectServerTVView(
+                        viewModel: ServerSelectionViewModel(
+                            sessionManager: sessionManager,
+                            context: plexApiContext
+                        )
+                    )
+                }
+            case .ready:
+                MainTabTVView()
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
+    let context = PlexAPIContext()
     ContentView()
+        .environment(context)
+        .environment(SessionManager(context: context))
 }
