@@ -4,6 +4,9 @@
     "%lld" : {
 
     },
+    "•" : {
+
+    },
     "auth.profile.empty" : {
       "localizations" : {
         "en" : {
@@ -124,6 +127,9 @@
         }
       }
     },
+    "Browse your libraries soon." : {
+
+    },
     "common.actions.cancel" : {
       "localizations" : {
         "en" : {
@@ -231,6 +237,9 @@
           }
         }
       }
+    },
+    "common.actions.signOut" : {
+
     },
     "common.actions.switchProfile" : {
       "localizations" : {
@@ -398,6 +407,9 @@
         }
       }
     },
+    "Home experience is coming to Apple TV." : {
+
+    },
     "home.loading" : {
       "localizations" : {
         "en" : {
@@ -533,6 +545,9 @@
           }
         }
       }
+    },
+    "Manage your session while we finish the tvOS experience." : {
+
     },
     "media.detail.cast.empty" : {
       "localizations" : {
@@ -979,6 +994,9 @@
           }
         }
       }
+    },
+    "Search will arrive in a future build." : {
+
     },
     "search.badge.episode" : {
       "localizations" : {
@@ -1479,7 +1497,6 @@
       }
     },
     "signIn.tv.codeLabel %@" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1496,7 +1513,6 @@
       }
     },
     "signIn.tv.subtitle" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

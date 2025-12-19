@@ -48,7 +48,7 @@ struct ProfileSwitcherTVView: View {
 
     @ViewBuilder
     private var profilesGrid: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 32)], spacing: 36) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 240), spacing: 42)], spacing: 46) {
             if viewModel.users.isEmpty {
                 loadingState
             }

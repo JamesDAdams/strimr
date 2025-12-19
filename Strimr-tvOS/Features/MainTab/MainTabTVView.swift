@@ -34,7 +34,6 @@ struct MainTabTVView: View {
             }
             .tabItem { Label("tabs.more", systemImage: "ellipsis.circle") }
         }
-        .tint(.brandPrimary)
     }
 
     private var moreView: some View {
@@ -57,7 +56,6 @@ struct MainTabTVView: View {
                             .padding()
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.brandPrimary)
 
                     Button {
                         Task { await sessionManager.requestServerSelection() }
@@ -68,7 +66,7 @@ struct MainTabTVView: View {
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Button(role: .destructive) {
+                    Button {
                         Task { await sessionManager.signOut() }
                     } label: {
                         Label("common.actions.signOut", systemImage: "rectangle.portrait.and.arrow.right")

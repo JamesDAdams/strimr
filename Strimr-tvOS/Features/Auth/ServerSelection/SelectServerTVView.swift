@@ -60,11 +60,13 @@ struct SelectServerTVView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         } else {
             ScrollView {
-                LazyVStack(spacing: 16) {
+                LazyVStack(spacing: 64) {
                     ForEach(viewModel.servers, id: \.clientIdentifier) { server in
                         serverRow(server)
                     }
                 }
+                .padding(.horizontal, 36)
+                .padding(.vertical, 60)
             }
         }
     }
@@ -73,7 +75,7 @@ struct SelectServerTVView: View {
         Button {
             Task { await viewModel.select(server: server) }
         } label: {
-            HStack(spacing: 16) {
+            HStack(spacing: 48) {
                 Circle()
                     .fill(.brandPrimary.opacity(0.2))
                     .frame(width: 64, height: 64)
@@ -94,7 +96,7 @@ struct SelectServerTVView: View {
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)
             }
-            .padding(18)
+            .padding(32)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.white.opacity(0.06))
             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
