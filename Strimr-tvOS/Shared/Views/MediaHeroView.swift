@@ -9,21 +9,25 @@ struct MediaHeroView: View {
 
     var body: some View {
         GeometryReader { proxy in
-            ZStack(alignment: .topLeading) {
+            ZStack {
                 MediaBackdropGradient(colors: MediaBackdropGradient.colors(for: media))
                     .ignoresSafeArea()
                 
                 heroImage
-                    .frame(height: (proxy.size.height
-                                    + proxy.safeAreaInsets.top
-                                    + proxy.safeAreaInsets.bottom) * 0.66)
+                    .frame(
+                        width: (proxy.size.width + proxy.safeAreaInsets.leading + proxy.safeAreaInsets.trailing) * 0.66,
+                        height: (proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom) * 0.66,
+                    )
                     .clipped()
+                    .overlay(Color.black.opacity(0.2))
                     .mask(heroMask)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                     .ignoresSafeArea()
+                
 
                 heroContent
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
         .task(id: media.id) {
             await loadImage()
@@ -99,13 +103,16 @@ struct MediaHeroView: View {
 
     private var heroMask: some View {
         LinearGradient(
-            colors: [
-                .white,
-                .white,
-                .clear,
-            ],
+            colors: [.black, .black, .clear],
             startPoint: .top,
             endPoint: .bottom
+        )
+        .mask(
+            LinearGradient(
+                colors: [.black, .black, .clear],
+                startPoint: .trailing,
+                endPoint: .leading
+            )
         )
     }
 
