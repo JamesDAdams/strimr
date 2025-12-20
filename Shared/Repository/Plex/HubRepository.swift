@@ -44,9 +44,11 @@ final class HubRepository {
         if resolved.count == nil {
             queryItems.append(URLQueryItem(name: "count", value: "20"))
         }
+        #if !os(tvOS)
         if resolved.excludeFields == nil {
             queryItems.append(URLQueryItem(name: "excludeFields", value: "summary"))
         }
+        #endif
         if resolved.excludeContinueWatching == nil {
             queryItems.append(URLQueryItem(name: "excludeContinueWatching", value: "1"))
         }
@@ -54,13 +56,13 @@ final class HubRepository {
     }
 
     func getSectionHubs(sectionId: Int) async throws -> PlexHubMediaContainer {
-        try await network.request(
-            path: "/hubs/sections/\(sectionId)",
-            queryItems: [
-                URLQueryItem(name: "count", value: "20"),
-                URLQueryItem(name: "excludeFields", value: "summary"),
-            ]
-        )
+        var queryItems = [
+            URLQueryItem(name: "count", value: "20"),
+        ]
+        #if !os(tvOS)
+        queryItems.append(URLQueryItem(name: "excludeFields", value: "summary"))
+        #endif
+        return try await network.request(path: "/hubs/sections/\(sectionId)", queryItems: queryItems)
     }
 
     func getRelatedMediaHubs(ratingKey: String) async throws -> PlexHubMediaContainer {
