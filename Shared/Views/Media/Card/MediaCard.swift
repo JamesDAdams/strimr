@@ -4,7 +4,7 @@ struct MediaCard: View {
     @Environment(PlexAPIContext.self) private var plexApiContext
 #if os(tvOS)
     @Environment(MediaFocusModel.self) private var focusModel
-    @FocusState private var focusedMedia: MediaItem?
+    @FocusState private var isFocused: Bool
 #endif
 
     enum Layout {
@@ -58,6 +58,7 @@ struct MediaCard: View {
                     }
                 }
 
+                #if !os(tvOS)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(media.primaryLabel)
                         .font(.headline)
@@ -71,14 +72,23 @@ struct MediaCard: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
+                #endif
             }
         }
         .buttonStyle(.plain)
 #if os(tvOS)
         .focusable()
-        .focused($focusedMedia, equals: media)
-        .onChange(of: focusedMedia) { _, newValue in
-            if newValue == media {
+        .focused($isFocused)
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(
+                    isFocused ? Color.brandSecondary : .clear,
+                    lineWidth: 4
+                )
+        }
+        .animation(.easeOut(duration: 0.15), value: isFocused)
+        .onChange(of: isFocused) { _, focused in
+            if focused {
                 focusModel.focusedMedia = media
             }
         }
