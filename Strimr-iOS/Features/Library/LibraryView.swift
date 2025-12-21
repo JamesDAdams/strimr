@@ -3,6 +3,8 @@ import SwiftUI
 struct LibraryView: View {
     @State var viewModel: LibraryViewModel
     let onSelectMedia: (MediaItem) -> Void
+    private let cardMinHeight: CGFloat = 120
+    private let cardMaxHeight: CGFloat = 160
 
     init(
         viewModel: LibraryViewModel,
@@ -34,11 +36,11 @@ struct LibraryView: View {
                                         Color.gray.opacity(0.1)
                                     }
                                 }
-                                .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 160)
+                                .frame(maxWidth: .infinity, minHeight: cardMinHeight, maxHeight: cardMaxHeight)
                                 .clipped()
                             } else {
                                 Color.gray.opacity(0.08)
-                                    .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 160)
+                                    .frame(maxWidth: .infinity, minHeight: cardMinHeight, maxHeight: cardMaxHeight)
                             }
 
                             LinearGradient(
@@ -50,7 +52,7 @@ struct LibraryView: View {
                                 startPoint: .bottom,
                                 endPoint: .top
                             )
-                            .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 160)
+                            .frame(maxWidth: .infinity, minHeight: cardMinHeight, maxHeight: cardMaxHeight)
 
                             HStack(spacing: 12) {
                                 Image(systemName: library.iconName)
@@ -71,7 +73,7 @@ struct LibraryView: View {
                             }
                             .padding(16)
                         }
-                        .frame(maxWidth: .infinity, minHeight: 120, maxHeight: 160, alignment: .leading)
+                        .frame(maxWidth: .infinity, minHeight: cardMinHeight, maxHeight: cardMaxHeight, alignment: .leading)
                         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                         .shadow(color: .black.opacity(0.08), radius: 8, x: 0, y: 4)
                         .padding(.vertical, 4)
@@ -99,17 +101,5 @@ struct LibraryView: View {
         .task {
             await viewModel.load()
         }
-    }
-}
-
-#Preview {
-    let viewModel = LibraryViewModel(context: PlexAPIContext())
-    viewModel.libraries = [
-        Library(id: "1", title: "Movies", type: .movie, sectionId: 1),
-        Library(id: "2", title: "Shows", type: .show, sectionId: 2),
-    ]
-
-    return NavigationStack {
-        LibraryView(viewModel: viewModel)
     }
 }

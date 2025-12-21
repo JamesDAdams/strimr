@@ -21,10 +21,17 @@ struct MainTabTVView: View {
             .tabItem { Label("tabs.search", systemImage: "magnifyingglass") }
 
             NavigationStack {
-                TVSectionPlaceholder(
-                    title: "tabs.libraries",
-                    subtitle: "Browse your libraries soon."
-                )
+                ZStack {
+                    Color("Background")
+                        .ignoresSafeArea()
+
+                    LibraryTVView(
+                        viewModel: LibraryViewModel(context: plexApiContext)
+                    )
+                    .navigationDestination(for: Library.self) { library in
+                        LibraryDetailView(library: library)
+                    }
+                }
             }
             .tabItem { Label("tabs.libraries", systemImage: "rectangle.stack.fill") }
 
@@ -78,28 +85,6 @@ struct MainTabTVView: View {
                 }
                 .padding(48)
             }
-        }
-    }
-}
-
-private struct TVSectionPlaceholder: View {
-    var title: LocalizedStringKey
-    var subtitle: LocalizedStringKey
-
-    var body: some View {
-        ZStack {
-            Color("Background").ignoresSafeArea()
-
-            VStack(alignment: .leading, spacing: 16) {
-                Text(title)
-                    .font(.largeTitle.bold())
-                Text(subtitle)
-                    .foregroundStyle(.secondary)
-                    .font(.title3)
-
-                Spacer()
-            }
-            .padding(48)
         }
     }
 }

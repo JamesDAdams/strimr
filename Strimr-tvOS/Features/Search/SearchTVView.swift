@@ -55,7 +55,7 @@ struct SearchTVView: View {
             ContentUnavailableView("search.noResults.title", systemImage: "film.stack.fill", description: Text("search.noResults.description"))
                 .frame(maxWidth: .infinity)
         } else {
-            LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 16) {
+            LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 48) {
                 ForEach(viewModel.filteredItems) { media in
                     card(for: media)
                 }
