@@ -73,7 +73,6 @@ struct MainTabView: View {
             .tag(MainCoordinator.Tab.more)
         }
         .tint(.brandPrimary)
-        .tabViewStyle(.sidebarAdaptable)
         .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
             if let ratingKey = coordinator.selectedRatingKey {
                 PlayerWrapper(viewModel: PlayerViewModel(ratingKey: ratingKey, context: plexApiContext))

@@ -40,7 +40,6 @@ struct LibraryDetailView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
         }
-        .navigationTitle(library.title)
     }
 }
 
@@ -59,14 +58,5 @@ enum LibraryDetailTab: String, CaseIterable, Identifiable {
         case .browse:
             return "library.detail.tab.browse"
         }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        LibraryDetailView(
-            library: Library(id: "1", title: "Movies", type: .movie),
-            onSelectMedia: { _ in }
-        )
     }
 }
