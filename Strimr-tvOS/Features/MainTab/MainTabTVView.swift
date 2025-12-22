@@ -60,8 +60,16 @@ struct MainTabTVView: View {
         .fullScreenCover(item: $selectedMedia) { media in
             MediaDetailTVView(
                 viewModel: MediaDetailViewModel(media: media, context: plexApiContext),
+                onPlay: { ratingKey in
+                    coordinator.showPlayer(for: ratingKey)
+                },
                 onSelectMedia: showMediaDetail
             )
+        }
+        .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
+            if let ratingKey = coordinator.selectedRatingKey {
+                PlayerTVView(viewModel: PlayerViewModel(ratingKey: ratingKey, context: plexApiContext))
+            }
         }
     }
 

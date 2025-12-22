@@ -45,9 +45,18 @@ struct PlayerTimelineView: View {
 
             ZStack {
                 bufferTrack
+#if os(tvOS)
+                PlayerTimelineScrubberTVView(
+                    position: $position,
+                    upperBound: sliderUpperBound,
+                    duration: duration,
+                    onEditingChanged: onEditingChanged
+                )
+#else
                 Slider(value: sliderBinding, in: 0 ... sliderUpperBound, onEditingChanged: onEditingChanged)
                     .tint(.white)
                     .shadow(color: .black.opacity(0.25), radius: 12, x: 0, y: 8)
+#endif
             }
 
             HStack {
@@ -83,8 +92,11 @@ struct PlayerTimelineView: View {
                     .fill(Color.white.opacity(0.65))
                     .frame(width: bufferWidth)
             }
+            #if os(tvOS)
+            .frame(height: 10)
+            #else
             .frame(height: 4)
-            .padding(.horizontal, 2)
+            #endif
             .frame(maxHeight: .infinity, alignment: .center)
             .allowsHitTesting(false)
         }
@@ -103,18 +115,5 @@ struct PlayerTimelineView: View {
         } else {
             return String(format: "%02d:%02d", minutes, secs)
         }
-    }
-}
-
-#Preview {
-    ZStack {
-        Color.black.ignoresSafeArea()
-        PlayerTimelineView(
-            position: .constant(15),
-            duration: 60,
-            bufferedAhead: 20,
-            playbackPosition: 10,
-            supportsHDR: true
-        ) { _ in }
     }
 }
