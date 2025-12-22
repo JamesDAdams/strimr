@@ -52,6 +52,7 @@ struct HomeTVView: View {
                         MediaCarousel(
                             layout: .landscape,
                             items: hub.items,
+                            showsLabels: false,
                             onSelectMedia: onSelectMedia
                         )
                     }
@@ -64,6 +65,7 @@ struct HomeTVView: View {
                                 MediaCarousel(
                                     layout: .portrait,
                                     items: hub.items,
+                                    showsLabels: false,
                                     onSelectMedia: onSelectMedia
                                 )
                             }

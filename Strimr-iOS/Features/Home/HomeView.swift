@@ -21,6 +21,7 @@ struct HomeView: View {
                         MediaCarousel(
                             layout: .landscape,
                             items: hub.items,
+                            showsLabels: true,
                             onSelectMedia: onSelectMedia
                         )
                     }
@@ -33,6 +34,7 @@ struct HomeView: View {
                                 MediaCarousel(
                                     layout: .portrait,
                                     items: hub.items,
+                                    showsLabels: true,
                                     onSelectMedia: onSelectMedia
                                 )
                             }

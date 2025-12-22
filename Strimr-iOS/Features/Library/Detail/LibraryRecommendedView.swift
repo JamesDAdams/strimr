@@ -46,12 +46,14 @@ struct LibraryRecommendedView: View {
             MediaCarousel(
                 layout: .landscape,
                 items: hub.items,
+                showsLabels: true,
                 onSelectMedia: onSelectMedia
             )
         } else {
             MediaCarousel(
                 layout: .portrait,
                 items: hub.items,
+                showsLabels: true,
                 onSelectMedia: onSelectMedia
             )
         }

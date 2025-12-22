@@ -12,7 +12,7 @@ struct LibraryBrowseView: View {
         ScrollView {
             LazyVGrid(columns: gridColumns, spacing: 16) {
                 ForEach(viewModel.items) { media in
-                    PortraitMediaCard(media: media) {
+                    PortraitMediaCard(media: media, showsLabels: true) {
                         onSelectMedia(media)
                     }
                     .frame(maxWidth: .infinity, minHeight: 200)

@@ -26,7 +26,7 @@ struct LibraryBrowseView: View {
                         ForEach(0..<viewModel.totalItemCount, id: \.self) { index in
                             Group {
                                 if let media = viewModel.itemsByIndex[index] {
-                                    PortraitMediaCard(media: media) {
+                                    PortraitMediaCard(media: media, showsLabels: true) {
                                         onSelectMedia(media)
                                     }
                                 } else {

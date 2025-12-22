@@ -86,12 +86,14 @@ struct LibraryTVRecommendedView: View {
             MediaCarousel(
                 layout: .landscape,
                 items: hub.items,
+                showsLabels: false,
                 onSelectMedia: onSelectMedia
             )
         } else {
             MediaCarousel(
                 layout: .portrait,
                 items: hub.items,
+                showsLabels: false,
                 onSelectMedia: onSelectMedia
             )
         }

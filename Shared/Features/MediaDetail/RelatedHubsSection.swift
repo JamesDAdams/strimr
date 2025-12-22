@@ -48,6 +48,7 @@ struct RelatedHubsSection: View {
                         MediaCarousel(
                             layout: .portrait,
                             items: hub.items,
+                            showsLabels: true,
                             onSelectMedia: onSelectMedia
                         )
                     }

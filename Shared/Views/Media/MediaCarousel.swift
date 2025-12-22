@@ -5,6 +5,7 @@ struct MediaCarousel: View {
 
     let layout: Layout
     let items: [MediaItem]
+    let showsLabels: Bool
     let onSelectMedia: (MediaItem) -> Void
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -30,9 +31,13 @@ struct MediaCarousel: View {
     private func card(for media: MediaItem) -> some View {
         switch layout {
         case .portrait:
-            PortraitMediaCard(media: media) { onSelectMedia(media) }
+            PortraitMediaCard(media: media, showsLabels: showsLabels) {
+                onSelectMedia(media)
+            }
         case .landscape:
-            LandscapeMediaCard(media: media) { onSelectMedia(media) }
+            LandscapeMediaCard(media: media, showsLabels: showsLabels) {
+                onSelectMedia(media)
+            }
         }
     }
 
