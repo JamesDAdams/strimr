@@ -4,50 +4,42 @@ struct MainTabTVView: View {
     @Environment(SessionManager.self) private var sessionManager
     @Environment(PlexAPIContext.self) private var plexApiContext
     @StateObject private var coordinator = MainCoordinator()
+    @State private var selectedMedia: MediaItem?
 
     var body: some View {
         TabView(selection: $coordinator.tab) {
-            NavigationStack(path: coordinator.pathBinding(for: .home)) {
+            NavigationStack {
                 HomeTVView(
                     viewModel: HomeViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
+                    onSelectMedia: showMediaDetail
                 )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
             }
             .tabItem { Label("tabs.home", systemImage: "house.fill") }
             .tag(MainCoordinator.Tab.home)
 
-            NavigationStack(path: coordinator.pathBinding(for: .search)) {
+            NavigationStack {
                 SearchTVView(
                     viewModel: SearchViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
+                    onSelectMedia: showMediaDetail
                 )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
             }
             .tabItem { Label("tabs.search", systemImage: "magnifyingglass") }
             .tag(MainCoordinator.Tab.search)
 
-            NavigationStack(path: coordinator.pathBinding(for: .library)) {
+            NavigationStack {
                 ZStack {
                     Color("Background")
                         .ignoresSafeArea()
 
                     LibraryTVView(
                         viewModel: LibraryViewModel(context: plexApiContext),
-                        onSelectMedia: coordinator.showMediaDetail
+                        onSelectMedia: showMediaDetail
                     )
                     .navigationDestination(for: Library.self) { library in
                         LibraryDetailView(
                             library: library,
-                            onSelectMedia: coordinator.showMediaDetail
+                            onSelectMedia: showMediaDetail
                         )
-                    }
-                    .navigationDestination(for: MainCoordinator.Route.self) { route in
-                        destination(for: route)
                     }
                 }
             }
@@ -59,6 +51,12 @@ struct MainTabTVView: View {
             }
             .tabItem { Label("tabs.more", systemImage: "ellipsis.circle") }
             .tag(MainCoordinator.Tab.more)
+        }
+        .fullScreenCover(item: $selectedMedia) { media in
+            MediaDetailTVView(
+                viewModel: MediaDetailViewModel(media: media, context: plexApiContext),
+                onSelectMedia: showMediaDetail
+            )
         }
     }
 
@@ -108,21 +106,7 @@ struct MainTabTVView: View {
         }
     }
 
-    @ViewBuilder
-    func destination(for route: MainCoordinator.Route) -> some View {
-        switch route {
-        case let .mediaDetail(media):
-            MediaDetailTVView(
-                viewModel: MediaDetailViewModel(media: media, context: plexApiContext),
-                onSelectMedia: coordinator.showMediaDetail
-            )
-        }
+    private func showMediaDetail(_ media: MediaItem) {
+        selectedMedia = media
     }
-}
-
-#Preview {
-    let context = PlexAPIContext()
-    return MainTabTVView()
-        .environment(context)
-        .environment(SessionManager(context: context))
 }
