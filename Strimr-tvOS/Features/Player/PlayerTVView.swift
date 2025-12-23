@@ -71,6 +71,9 @@ struct PlayerTVView: View {
                 Color.clear
                     .contentShape(Rectangle())
                     .focusable()
+                    .onTapGesture {
+                        showControls(temporarily: true)
+                    }
                     .onMoveCommand { direction in
                         handleMoveCommand(direction)
                     }
