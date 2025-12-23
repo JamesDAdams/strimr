@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct PlayerTVView: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(PlexAPIContext.self) private var context
     @Environment(SettingsManager.self) private var settingsManager
     @State var viewModel: PlayerViewModel
+    let onExit: () -> Void
     @State private var coordinator = MPVPlayerView.Coordinator()
     @State private var controlsVisible = true
     @State private var hideControlsWorkItem: DispatchWorkItem?
@@ -307,7 +307,7 @@ struct PlayerTVView: View {
 
     private func dismissPlayer() {
         hideControlsWorkItem?.cancel()
-        dismiss()
+        onExit()
     }
 
     private func handleScrubbing(editing: Bool) {

@@ -58,22 +58,45 @@ struct MainTabTVView: View {
             .tag(MainCoordinator.Tab.more)
         }
         .fullScreenCover(item: $selectedMedia) { media in
-            MediaDetailTVView(
-                viewModel: MediaDetailViewModel(media: media, context: plexApiContext),
-                onPlay: { ratingKey in
-                    coordinator.showPlayer(for: ratingKey)
-                },
+            MediaFlowTVView(
+                media: media,
+                context: plexApiContext,
                 onSelectMedia: showMediaDetail
             )
-        }
-        .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
-            if let ratingKey = coordinator.selectedRatingKey {
-                PlayerTVView(viewModel: PlayerViewModel(ratingKey: ratingKey, context: plexApiContext))
-            }
         }
     }
 
     private func showMediaDetail(_ media: MediaItem) {
         selectedMedia = media
+    }
+}
+
+private struct MediaFlowTVView: View {
+    let media: MediaItem
+    let context: PlexAPIContext
+    let onSelectMedia: (MediaItem) -> Void
+
+    @State private var path = NavigationPath()
+
+    var body: some View {
+        NavigationStack(path: $path) {
+            MediaDetailTVView(
+                viewModel: MediaDetailViewModel(media: media, context: context),
+                onPlay: { ratingKey in
+                    path.append(ratingKey)
+                },
+                onSelectMedia: onSelectMedia
+            )
+            .navigationDestination(for: String.self) { ratingKey in
+                PlayerTVView(
+                    viewModel: PlayerViewModel(ratingKey: ratingKey, context: context),
+                    onExit: {
+                        if !path.isEmpty {
+                            path.removeLast()
+                        }
+                    }
+                )
+            }
+        }
     }
 }
