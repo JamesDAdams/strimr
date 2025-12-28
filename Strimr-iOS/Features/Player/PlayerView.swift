@@ -73,10 +73,13 @@ struct PlayerView: View {
                 showControls(temporarily: true)
             }
             .ignoresSafeArea()
-            .contentShape(Rectangle())
-            .onTapGesture {
-                controlsVisible ? hideControls() : showControls(temporarily: true)
-            }
+
+            Color.clear
+                .contentShape(Rectangle())
+                .ignoresSafeArea()
+                .onTapGesture {
+                    controlsVisible ? hideControls() : showControls(temporarily: true)
+                }
 
             if bindableViewModel.isBuffering {
                 bufferingOverlay
@@ -427,11 +430,4 @@ struct PlayerView: View {
 
         await viewModel.load()
     }
-}
-
-#Preview {
-    let context = PlexAPIContext()
-    let viewModel = PlayerViewModel(ratingKey: "demo", context: context)
-    return PlayerView(viewModel: viewModel, initialPlayer: .mpv)
-        .environment(context)
 }
