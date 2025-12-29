@@ -29,6 +29,7 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
     deinit {
         mediaPlayer.stop()
         mediaPlayer.delegate = nil
+        updateIdleTimer(isPlaying: false)
     }
 
     override func viewDidLoad() {
@@ -102,6 +103,12 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         mediaPlayer.stop()
         mediaPlayer.delegate = nil
         mediaPlayer.drawable = nil
+        updateIdleTimer(isPlaying: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        updateIdleTimer(isPlaying: false)
     }
 
     func mediaPlayerStateChanged(_ aNotification: Notification) {
@@ -115,9 +122,12 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         }
 
         if state == .ended {
+            updateIdleTimer(isPlaying: false)
             DispatchQueue.main.async {
                 self.playDelegate?.playbackEnded()
             }
+        } else {
+            updateIdleTimer(isPlaying: !isPaused)
         }
     }
 
@@ -130,11 +140,18 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
             if timeSeconds != self.lastReportedTimeSeconds {
                 self.lastReportedTimeSeconds = timeSeconds
                 self.playDelegate?.propertyChange(player: self, property: .pausedForCache, data: false)
+                self.updateIdleTimer(isPlaying: true)
             }
             self.playDelegate?.propertyChange(player: self, property: .timePos, data: timeSeconds)
             if durationSeconds > 0 {
                 self.playDelegate?.propertyChange(player: self, property: .duration, data: durationSeconds)
             }
+        }
+    }
+
+    private func updateIdleTimer(isPlaying: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = isPlaying
         }
     }
 

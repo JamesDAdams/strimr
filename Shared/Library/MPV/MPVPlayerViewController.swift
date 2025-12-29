@@ -39,6 +39,7 @@ final class MPVPlayerViewController: UIViewController {
 
     deinit {
         destruct()
+        updateIdleTimer(isPlaying: false)
     }
 
     override func viewDidLoad() {
@@ -64,6 +65,11 @@ final class MPVPlayerViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         metalLayer.frame = view.frame
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        updateIdleTimer(isPlaying: false)
     }
 
     func setupMpv() {
@@ -144,10 +150,12 @@ final class MPVPlayerViewController: UIViewController {
 
     func play() {
         setFlag(MPVProperty.pause, false)
+        updateIdleTimer(isPlaying: true)
     }
 
     func pause() {
         setFlag(MPVProperty.pause, true)
+        updateIdleTimer(isPlaying: false)
     }
 
     func seek(to time: Double) {
@@ -322,6 +330,7 @@ final class MPVPlayerViewController: UIViewController {
                             let isPaused = pausedValue > 0
                             DispatchQueue.main.async {
                                 self.playDelegate?.propertyChange(mpv: mpv, property: playerProperty, data: isPaused)
+                                self.updateIdleTimer(isPlaying: !isPaused)
                             }
                         case .pausedForCache:
                             let buffering = UnsafePointer<Bool>(OpaquePointer(eventProperty.data))?.pointee ?? true
@@ -341,6 +350,7 @@ final class MPVPlayerViewController: UIViewController {
                     let endFileData = UnsafeMutablePointer<mpv_event_end_file>(OpaquePointer(event!.pointee.data))
                     let reason = endFileData?.pointee.reason ?? MPV_END_FILE_REASON_ERROR
                     if reason == MPV_END_FILE_REASON_EOF {
+                        self.updateIdleTimer(isPlaying: false)
                         DispatchQueue.main.async {
                             self.playDelegate?.playbackEnded()
                         }
@@ -371,6 +381,12 @@ final class MPVPlayerViewController: UIViewController {
 
         queue.async {
             mpv_terminate_destroy(mpvHandle)
+        }
+    }
+
+    private func updateIdleTimer(isPlaying: Bool) {
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = isPlaying
         }
     }
 
