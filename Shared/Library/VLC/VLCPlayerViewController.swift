@@ -2,9 +2,9 @@ import Foundation
 import UIKit
 
 #if os(tvOS)
-import TVVLCKit
+    import TVVLCKit
 #else
-import MobileVLCKit
+    import MobileVLCKit
 #endif
 
 final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
@@ -13,6 +13,7 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         let scaledValue = Int(round(Double(options.subtitleScale) * 0.5))
         return VLCMediaPlayer(options: ["--sub-text-scale=\(scaledValue)"])
     }()
+
     var playDelegate: VLCPlayerDelegate?
     var playUrl: URL?
     private var lastReportedTimeSeconds = -1.0
@@ -22,7 +23,8 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -82,7 +84,7 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         mediaPlayer.currentVideoSubTitleIndex = Int32(trackID)
     }
 
-    func trackList() -> [PlayerTrack] {        
+    func trackList() -> [PlayerTrack] {
         let audioTracks = makeTracks(
             names: mediaPlayer.audioTrackNames,
             indexes: mediaPlayer.audioTrackIndexes,
@@ -111,7 +113,7 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         updateIdleTimer(isPlaying: false)
     }
 
-    func mediaPlayerStateChanged(_ aNotification: Notification) {
+    func mediaPlayerStateChanged(_: Notification) {
         let state = mediaPlayer.state
         let isBuffering = state == .opening || state == .buffering
         let isPaused = state == .paused || state == .stopped || state == .ended
@@ -131,7 +133,7 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
         }
     }
 
-    func mediaPlayerTimeChanged(_ aNotification: Notification) {
+    func mediaPlayerTimeChanged(_: Notification) {
         let timeSeconds = Double(mediaPlayer.time.intValue) / 1000.0
         let durationSeconds = Double(mediaPlayer.media?.length.intValue ?? 0) / 1000.0
 

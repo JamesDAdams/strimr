@@ -23,18 +23,18 @@ struct MediaDetailTVView: View {
         GeometryReader { proxy in
             ZStack {
                 MediaHeroBackgroundView(media: bindableViewModel.media)
-                
+
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
                         MediaHeroContentView(media: focusedMedia ?? bindableViewModel.media)
                             .frame(maxWidth: proxy.size.width * 0.60, alignment: .leading)
-                        
+
                         playButton
-                        
+
                         if bindableViewModel.media.type == .show {
                             seasonsSection
                         }
-                        
+
                         CastSection(viewModel: bindableViewModel)
                         RelatedHubsSection(viewModel: bindableViewModel, onSelectMedia: onSelectMedia)
                     }

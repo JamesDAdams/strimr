@@ -16,7 +16,6 @@ struct PlayerIconButton: View {
     }
 }
 
-
 struct PlayPauseButton: View {
     var isPaused: Bool
     let action: () -> Void
@@ -30,13 +29,11 @@ struct PlayPauseButton: View {
         }
         .accessibilityLabel(
             isPaused
-            ? String(localized: "common.actions.play")
-            : String(localized: "common.actions.pause")
+                ? String(localized: "common.actions.play")
+                : String(localized: "common.actions.pause")
         )
     }
 }
-
-
 
 struct SkipMarkerButton: View {
     let title: String
@@ -58,7 +55,6 @@ struct SkipMarkerButton: View {
     }
 }
 
-
 struct PlayerSettingButton: View {
     var systemImage: String
     var action: () -> Void
@@ -72,5 +68,3 @@ struct PlayerSettingButton: View {
         }
     }
 }
-
-

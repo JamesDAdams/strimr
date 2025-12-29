@@ -152,7 +152,7 @@ struct MediaHeroContentView: View {
             }
         }
     }
-    
+
     private var summaryLineHeight: CGFloat {
         UIFont.preferredFont(forTextStyle: .callout).lineHeight
     }

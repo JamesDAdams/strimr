@@ -47,7 +47,7 @@ struct PlayerTimelineScrubberTVView: View {
                         .fill(Color.white)
                         .frame(width: progressWidth)
                         .frame(height: 8, alignment: .center)
-                    
+
                     Circle()
                         .fill(Color.white)
                         .frame(width: isFocused ? 24 : 18, height: isFocused ? 24 : 18)

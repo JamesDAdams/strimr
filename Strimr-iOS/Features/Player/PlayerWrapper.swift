@@ -15,7 +15,7 @@ struct PlayerWrapper: View {
                     initialPlayer: settingsManager.playback.player,
                     options: PlayerOptions(subtitleScale: settingsManager.playback.subtitleScale)
                 )
-                    .transition(.opacity)
+                .transition(.opacity)
             } else {
                 ProgressView()
                     .tint(.white)
