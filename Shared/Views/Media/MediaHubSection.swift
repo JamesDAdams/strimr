@@ -11,14 +11,14 @@ struct MediaHubSection<Content: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                RoundedRectangle(cornerRadius: 3, style: .continuous)
-                    .fill(Color.brandPrimary)
-                    .frame(width: 3, height: 18)
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.brandSecondary)
+                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                    .fill(Color.brandPrimary)
+                    .frame(width: 32, height: 4)
             }
             .padding(.horizontal, 2)
 
