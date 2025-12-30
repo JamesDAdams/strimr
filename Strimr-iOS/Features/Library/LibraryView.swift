@@ -98,6 +98,8 @@ struct LibraryView: View {
             }
         }
         .navigationTitle("tabs.libraries")
+        .navigationBarTitleDisplayMode(.inline)
+        .userMenuToolbar()
         .task {
             await viewModel.load()
         }

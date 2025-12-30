@@ -1,29 +1,29 @@
 import SwiftUI
 
-enum MoreRoute: Hashable {
-    case settings
-}
-
 @MainActor
-struct MoreView: View {
+struct UserMenuView: View {
     @Environment(SessionManager.self) private var sessionManager
     @State private var isShowingLogoutConfirmation = false
-    var onSwitchProfile: () -> Void = {}
-    var onSwitchServer: () -> Void = {}
 
     var body: some View {
         List {
             Section {
-                NavigationLink(value: MoreRoute.settings) {
+                NavigationLink {
+                    SettingsView()
+                } label: {
                     Label("settings.title", systemImage: "gearshape.fill")
                 }
 
-                Button(action: onSwitchProfile) {
+                Button {
+                    Task { await sessionManager.requestProfileSelection() }
+                } label: {
                     Label("common.actions.switchProfile", systemImage: "person.2.circle")
                 }
                 .buttonStyle(.plain)
 
-                Button(action: onSwitchServer) {
+                Button {
+                    Task { await sessionManager.requestServerSelection() }
+                } label: {
                     Label("common.actions.switchServer", systemImage: "server.rack")
                 }
                 .buttonStyle(.plain)
@@ -47,17 +47,5 @@ struct MoreView: View {
         } message: {
             Text("more.logout.message")
         }
-    }
-}
-
-#Preview {
-    NavigationStack {
-        MoreView()
-            .navigationDestination(for: MoreRoute.self) { route in
-                switch route {
-                case .settings:
-                    EmptyView()
-                }
-            }
     }
 }

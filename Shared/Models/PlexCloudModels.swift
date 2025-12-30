@@ -38,6 +38,7 @@ struct PlexCloudUser: Codable, Equatable {
     let confirmed: Bool
     let joinedAt: Int
     let authToken: String
+    let thumb: String
 }
 
 struct PlexCloudPin: Codable, Equatable {

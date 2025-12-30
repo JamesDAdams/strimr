@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MainTabView: View {
     @Environment(PlexAPIContext.self) private var plexApiContext
-    @Environment(SessionManager.self) private var sessionManager
     @StateObject private var coordinator = MainCoordinator()
     @State private var homeViewModel: HomeViewModel
     @State private var libraryViewModel: LibraryViewModel
@@ -55,22 +54,6 @@ struct MainTabView: View {
                     }
                 }
             }
-
-            Tab("tabs.more", systemImage: "ellipsis.circle", value: MainCoordinator.Tab.more) {
-                NavigationStack(path: coordinator.pathBinding(for: .more)) {
-                    MoreView(
-                        onSwitchProfile: {
-                            Task { await sessionManager.requestProfileSelection() }
-                        },
-                        onSwitchServer: {
-                            Task { await sessionManager.requestServerSelection() }
-                        }
-                    )
-                    .navigationDestination(for: MoreRoute.self) {
-                        moreDestination(for: $0)
-                    }
-                }
-            }
         }
         .tint(.brandPrimary)
         .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
@@ -94,14 +77,6 @@ struct MainTabView: View {
                 },
                 onSelectMedia: coordinator.showMediaDetail
             )
-        }
-    }
-
-    @ViewBuilder
-    private func moreDestination(for route: MoreRoute) -> some View {
-        switch route {
-        case .settings:
-            SettingsView()
         }
     }
 }

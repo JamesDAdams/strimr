@@ -25,6 +25,8 @@ struct SearchView: View {
             .padding(.vertical, 12)
         }
         .navigationTitle("tabs.search")
+        .navigationBarTitleDisplayMode(.inline)
+        .userMenuToolbar()
         .searchable(
             text: $bindableViewModel.query,
             placement: .navigationBarDrawer(displayMode: .always),

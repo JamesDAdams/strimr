@@ -59,6 +59,8 @@ struct HomeView: View {
             .padding(.vertical, 20)
         }
         .navigationTitle("tabs.home")
+        .navigationBarTitleDisplayMode(.inline)
+        .userMenuToolbar()
         .task {
             await viewModel.load()
         }
