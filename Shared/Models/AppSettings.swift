@@ -16,6 +16,8 @@ struct AppSettings: Codable, Equatable {
     var playback = PlaybackSettings()
     var interface = InterfaceSettings()
 
+    init() {}
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         playback = try container.decodeIfPresent(PlaybackSettings.self, forKey: .playback) ?? PlaybackSettings()

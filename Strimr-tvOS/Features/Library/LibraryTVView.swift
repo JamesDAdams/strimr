@@ -2,9 +2,11 @@ import SwiftUI
 
 struct LibraryTVView: View {
     @State var viewModel: LibraryViewModel
+    @Environment(SettingsManager.self) private var settingsManager
     let onSelectMedia: (MediaItem) -> Void
     private let cardMinHeight: CGFloat = 240
     private let cardMaxHeight: CGFloat = 380
+    @State private var isHiddenExpanded = false
 
     init(
         viewModel: LibraryViewModel,
@@ -16,14 +18,48 @@ struct LibraryTVView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: gridColumns, spacing: 48) {
-                ForEach(viewModel.libraries) { library in
-                    NavigationLink(value: library) {
-                        libraryCard(for: library)
+            VStack(alignment: .leading, spacing: 32) {
+                LazyVGrid(columns: gridColumns, spacing: 48) {
+                    ForEach(visibleLibraries) { library in
+                        NavigationLink(value: library) {
+                            libraryCard(for: library)
+                        }
+                        .buttonStyle(.plain)
+                        .task {
+                            await viewModel.ensureArtwork(for: library)
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .task {
-                        await viewModel.ensureArtwork(for: library)
+                }
+
+                if !hiddenLibraries.isEmpty {
+                    VStack(alignment: .leading, spacing: 24) {
+                        Button {
+                            isHiddenExpanded.toggle()
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: isHiddenExpanded ? "chevron.down" : "chevron.right")
+                                    .font(.headline)
+                                    .foregroundStyle(.secondary)
+                                Text("library.hidden.title")
+                                    .font(.title3.weight(.semibold))
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .buttonStyle(.plain)
+
+                        if isHiddenExpanded {
+                            LazyVGrid(columns: gridColumns, spacing: 48) {
+                                ForEach(hiddenLibraries) { library in
+                                    NavigationLink(value: library) {
+                                        libraryCard(for: library)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .task {
+                                        await viewModel.ensureArtwork(for: library)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -43,6 +79,18 @@ struct LibraryTVView: View {
         .task {
             await viewModel.load()
         }
+    }
+
+    private var hiddenLibraryIds: Set<String> {
+        Set(settingsManager.interface.hiddenLibraryIds)
+    }
+
+    private var visibleLibraries: [Library] {
+        viewModel.libraries.filter { !hiddenLibraryIds.contains($0.id) }
+    }
+
+    private var hiddenLibraries: [Library] {
+        viewModel.libraries.filter { hiddenLibraryIds.contains($0.id) }
     }
 
     private var gridColumns: [GridItem] {
