@@ -2,6 +2,7 @@ import Observation
 import SwiftUI
 
 struct MediaDetailTVView: View {
+    @EnvironmentObject private var coordinator: MainCoordinator
     @State var viewModel: MediaDetailViewModel
     @State private var focusedMedia: MediaItem?
     private let onPlay: (String) -> Void
@@ -43,6 +44,10 @@ struct MediaDetailTVView: View {
         }
         .task {
             await bindableViewModel.loadDetails()
+        }
+        .onChange(of: coordinator.isPresentingPlayer) { _, isPresenting in
+            guard !isPresenting else { return }
+            Task { await bindableViewModel.loadDetails() }
         }
         .onAppear {
             if focusedMedia == nil {

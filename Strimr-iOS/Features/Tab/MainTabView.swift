@@ -72,6 +72,7 @@ struct MainTabView: View {
             }
         }
         .tint(.brandPrimary)
+        .environmentObject(coordinator)
         .task {
             try? await libraryStore.loadLibraries()
         }

@@ -2,6 +2,7 @@ import Observation
 import SwiftUI
 
 struct MediaDetailView: View {
+    @EnvironmentObject private var coordinator: MainCoordinator
     @State var viewModel: MediaDetailViewModel
     @State private var isSummaryExpanded = false
     private let heroHeight: CGFloat = 320
@@ -49,6 +50,10 @@ struct MediaDetailView: View {
         .toolbar(.hidden, for: .tabBar)
         .task {
             await bindableViewModel.loadDetails()
+        }
+        .onChange(of: coordinator.isPresentingPlayer) { _, isPresenting in
+            guard !isPresenting else { return }
+            Task { await bindableViewModel.loadDetails() }
         }
         .background(gradientBackground(for: bindableViewModel))
     }

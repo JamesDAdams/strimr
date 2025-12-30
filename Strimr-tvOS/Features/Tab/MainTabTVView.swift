@@ -83,6 +83,7 @@ struct MainTabTVView: View {
                 }
             }
         }
+        .environmentObject(coordinator)
         .task {
             try? await libraryStore.loadLibraries()
         }
