@@ -64,7 +64,9 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
     }
 
     func seek(to time: Double) {
-        let milliseconds = max(0, Int32(time * 1000.0))
+        let durationSeconds = Double(mediaPlayer.media?.length.intValue ?? 0) / 1000.0
+        let clampedTime = clampSeekTime(time, durationSeconds: durationSeconds)
+        let milliseconds = max(0, Int32(clampedTime * 1000.0))
         mediaPlayer.time = VLCTime(int: milliseconds)
     }
 
@@ -185,5 +187,14 @@ final class VLCPlayerViewController: UIViewController, VLCMediaPlayerDelegate {
                 isSelected: id == selectedIndex
             )
         }
+    }
+
+    private func clampSeekTime(_ time: Double, durationSeconds: Double) -> Double {
+        guard durationSeconds > 0 else {
+            return max(0, time)
+        }
+        // Avoid seeking to the exact end, which can trigger VLC edge-case behavior.
+        let maxSeekTime = max(0, durationSeconds - 0.1)
+        return min(max(0, time), maxSeekTime)
     }
 }
