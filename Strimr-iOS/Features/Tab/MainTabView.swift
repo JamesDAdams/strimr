@@ -14,63 +14,63 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $coordinator.tab) {
-            NavigationStack(path: coordinator.pathBinding(for: .home)) {
-                HomeView(
-                    viewModel: homeViewModel,
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.home", systemImage: "house.fill") }
-            .tag(MainCoordinator.Tab.home)
-
-            NavigationStack(path: coordinator.pathBinding(for: .search)) {
-                SearchView(
-                    viewModel: SearchViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.search", systemImage: "magnifyingglass") }
-            .tag(MainCoordinator.Tab.search)
-
-            NavigationStack(path: coordinator.pathBinding(for: .library)) {
-                LibraryView(
-                    viewModel: libraryViewModel,
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: Library.self) { library in
-                    LibraryDetailView(
-                        library: library,
+            Tab("tabs.home", systemImage: "house.fill", value: MainCoordinator.Tab.home) {
+                NavigationStack(path: coordinator.pathBinding(for: .home)) {
+                    HomeView(
+                        viewModel: homeViewModel,
                         onSelectMedia: coordinator.showMediaDetail
                     )
-                }
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.libraries", systemImage: "rectangle.stack.fill") }
-            .tag(MainCoordinator.Tab.library)
-
-            NavigationStack(path: coordinator.pathBinding(for: .more)) {
-                MoreView(
-                    onSwitchProfile: {
-                        Task { await sessionManager.requestProfileSelection() }
-                    },
-                    onSwitchServer: {
-                        Task { await sessionManager.requestServerSelection() }
+                    .navigationDestination(for: MainCoordinator.Route.self) {
+                        destination(for: $0)
                     }
-                )
-                .navigationDestination(for: MoreRoute.self) { route in
-                    moreDestination(for: route)
                 }
             }
-            .tabItem { Label("tabs.more", systemImage: "ellipsis.circle") }
-            .tag(MainCoordinator.Tab.more)
+
+            Tab("tabs.search", systemImage: "magnifyingglass", value: MainCoordinator.Tab.search, role: .search) {
+                NavigationStack(path: coordinator.pathBinding(for: .search)) {
+                    SearchView(
+                        viewModel: SearchViewModel(context: plexApiContext),
+                        onSelectMedia: coordinator.showMediaDetail
+                    )
+                    .navigationDestination(for: MainCoordinator.Route.self) {
+                        destination(for: $0)
+                    }
+                }
+            }
+
+            Tab("tabs.libraries", systemImage: "rectangle.stack.fill", value: MainCoordinator.Tab.library) {
+                NavigationStack(path: coordinator.pathBinding(for: .library)) {
+                    LibraryView(
+                        viewModel: libraryViewModel,
+                        onSelectMedia: coordinator.showMediaDetail
+                    )
+                    .navigationDestination(for: Library.self) { library in
+                        LibraryDetailView(
+                            library: library,
+                            onSelectMedia: coordinator.showMediaDetail
+                        )
+                    }
+                    .navigationDestination(for: MainCoordinator.Route.self) {
+                        destination(for: $0)
+                    }
+                }
+            }
+
+            Tab("tabs.more", systemImage: "ellipsis.circle", value: MainCoordinator.Tab.more) {
+                NavigationStack(path: coordinator.pathBinding(for: .more)) {
+                    MoreView(
+                        onSwitchProfile: {
+                            Task { await sessionManager.requestProfileSelection() }
+                        },
+                        onSwitchServer: {
+                            Task { await sessionManager.requestServerSelection() }
+                        }
+                    )
+                    .navigationDestination(for: MoreRoute.self) {
+                        moreDestination(for: $0)
+                    }
+                }
+            }
         }
         .tint(.brandPrimary)
         .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {

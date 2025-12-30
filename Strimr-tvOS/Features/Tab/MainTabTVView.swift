@@ -6,59 +6,59 @@ struct MainTabTVView: View {
 
     var body: some View {
         TabView(selection: $coordinator.tab) {
-            NavigationStack(path: coordinator.pathBinding(for: .home)) {
-                HomeTVView(
-                    viewModel: HomeViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.home", systemImage: "house.fill") }
-            .tag(MainCoordinator.Tab.home)
-
-            NavigationStack(path: coordinator.pathBinding(for: .search)) {
-                SearchTVView(
-                    viewModel: SearchViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.search", systemImage: "magnifyingglass") }
-            .tag(MainCoordinator.Tab.search)
-
-            NavigationStack(path: coordinator.pathBinding(for: .library)) {
-                LibraryTVView(
-                    viewModel: LibraryViewModel(context: plexApiContext),
-                    onSelectMedia: coordinator.showMediaDetail
-                )
-                .navigationDestination(for: Library.self) { library in
-                    LibraryDetailView(
-                        library: library,
+            Tab("tabs.home", systemImage: "house.fill", value: MainCoordinator.Tab.home) {
+                NavigationStack(path: coordinator.pathBinding(for: .home)) {
+                    HomeTVView(
+                        viewModel: HomeViewModel(context: plexApiContext),
                         onSelectMedia: coordinator.showMediaDetail
                     )
-                }
-                .navigationDestination(for: MainCoordinator.Route.self) { route in
-                    destination(for: route)
-                }
-            }
-            .tabItem { Label("tabs.libraries", systemImage: "rectangle.stack.fill") }
-            .tag(MainCoordinator.Tab.library)
-
-            NavigationStack(path: coordinator.pathBinding(for: .more)) {
-                MoreTVView()
-                    .navigationDestination(for: MoreTVRoute.self) { route in
-                        switch route {
-                        case .settings:
-                            SettingsView()
-                        }
+                    .navigationDestination(for: MainCoordinator.Route.self) { route in
+                        destination(for: route)
                     }
+                }
             }
-            .tabItem { Label("tabs.more", systemImage: "ellipsis.circle") }
-            .tag(MainCoordinator.Tab.more)
+
+            Tab("tabs.search", systemImage: "magnifyingglass", value: MainCoordinator.Tab.search, role: .search) {
+                NavigationStack(path: coordinator.pathBinding(for: .search)) {
+                    SearchTVView(
+                        viewModel: SearchViewModel(context: plexApiContext),
+                        onSelectMedia: coordinator.showMediaDetail
+                    )
+                    .navigationDestination(for: MainCoordinator.Route.self) { route in
+                        destination(for: route)
+                    }
+                }
+            }
+
+            Tab("tabs.libraries", systemImage: "rectangle.stack.fill", value: MainCoordinator.Tab.library) {
+                NavigationStack(path: coordinator.pathBinding(for: .library)) {
+                    LibraryTVView(
+                        viewModel: LibraryViewModel(context: plexApiContext),
+                        onSelectMedia: coordinator.showMediaDetail
+                    )
+                    .navigationDestination(for: Library.self) { library in
+                        LibraryDetailView(
+                            library: library,
+                            onSelectMedia: coordinator.showMediaDetail
+                        )
+                    }
+                    .navigationDestination(for: MainCoordinator.Route.self) { route in
+                        destination(for: route)
+                    }
+                }
+            }
+
+            Tab("tabs.more", systemImage: "ellipsis.circle", value: MainCoordinator.Tab.more) {
+                NavigationStack(path: coordinator.pathBinding(for: .more)) {
+                    MoreTVView()
+                        .navigationDestination(for: MoreTVRoute.self) { route in
+                            switch route {
+                            case .settings:
+                                SettingsView()
+                            }
+                        }
+                }
+            }
         }
         .fullScreenCover(isPresented: $coordinator.isPresentingPlayer, onDismiss: coordinator.resetPlayer) {
             if let ratingKey = coordinator.selectedRatingKey {
