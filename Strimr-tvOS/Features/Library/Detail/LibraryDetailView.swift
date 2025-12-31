@@ -8,6 +8,8 @@ struct LibraryDetailView: View {
     @State private var viewModel = LibraryDetailViewModel()
     @State private var selectedTab: LibraryDetailTab = .recommended
     @FocusState private var focusedSidebarItem: LibraryDetailTab?
+    @FocusState private var contentFocused: Bool
+    @Namespace private var focusNamespace
 
     init(
         library: Library,
@@ -32,7 +34,11 @@ struct LibraryDetailView: View {
                 contentView
                     .focusSection()
             }
+            .focusScope(focusNamespace)
             .ignoresSafeArea(edges: [.leading])
+        }
+        .onAppear {
+            contentFocused = true
         }
     }
 
@@ -58,7 +64,9 @@ struct LibraryDetailView: View {
                 )
             }
         }
+        .focused($contentFocused)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .prefersDefaultFocus(true, in: focusNamespace)
     }
 
     private var sidebarView: some View {
