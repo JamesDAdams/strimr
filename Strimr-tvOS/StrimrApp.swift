@@ -10,10 +10,11 @@ struct StrimrApp: App {
 
     init() {
         let context = PlexAPIContext()
+        let store = LibraryStore(context: context)
         _plexApiContext = State(initialValue: context)
-        _sessionManager = State(initialValue: SessionManager(context: context))
+        _sessionManager = State(initialValue: SessionManager(context: context, libraryStore: store))
         _settingsManager = State(initialValue: SettingsManager())
-        _libraryStore = State(initialValue: LibraryStore(context: context))
+        _libraryStore = State(initialValue: store)
         _mediaFocusModel = State(initialValue: MediaFocusModel())
     }
 

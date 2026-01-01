@@ -13,6 +13,7 @@ final class SessionManager {
     }
 
     @ObservationIgnored private let context: PlexAPIContext
+    @ObservationIgnored private let libraryStore: LibraryStore
     private(set) var status: Status = .hydrating
     private(set) var authToken: String?
     private(set) var user: PlexCloudUser?
@@ -22,8 +23,9 @@ final class SessionManager {
     @ObservationIgnored private let tokenKey = "strimr.plex.authToken"
     @ObservationIgnored private let serverIdDefaultsKey = "strimr.plex.serverIdentifier"
 
-    init(context: PlexAPIContext) {
+    init(context: PlexAPIContext, libraryStore: LibraryStore) {
         self.context = context
+        self.libraryStore = libraryStore
         Task { await hydrate() }
     }
 
@@ -94,6 +96,7 @@ final class SessionManager {
             plexServer = server
             UserDefaults.standard.set(server.clientIdentifier, forKey: serverIdDefaultsKey)
             if authToken != nil {
+                try? await libraryStore.loadLibraries()
                 status = .ready
             }
         } catch {
