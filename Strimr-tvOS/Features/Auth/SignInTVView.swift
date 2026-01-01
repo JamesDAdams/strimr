@@ -16,6 +16,11 @@ struct SignInTVView: View {
             Spacer()
 
             VStack(spacing: 12) {
+                Image(.icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 192, height: 192)
+
                 Text("signIn.title")
                     .multilineTextAlignment(.center)
                     .font(.largeTitle.bold())

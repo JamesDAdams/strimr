@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct SignInView: View {
     @State private var viewModel: SignInViewModel
@@ -13,11 +12,9 @@ struct SignInView: View {
             Spacer()
 
             VStack(spacing: 12) {
-                if let appIcon {
-                    Image(uiImage: appIcon)
-                        .resizable()
-                        .frame(width: 128, height: 128)
-                }
+                Image(.icon)
+                    .resizable()
+                    .frame(width: 128, height: 128)
 
                 Text("signIn.title")
                     .multilineTextAlignment(.center)
@@ -57,20 +54,5 @@ struct SignInView: View {
             Spacer()
         }
         .padding(24)
-    }
-}
-
-extension SignInView {
-    private var appIcon: UIImage? {
-        guard
-            let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
-            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-            let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-            let iconName = iconFiles.last
-        else {
-            return nil
-        }
-
-        return UIImage(named: iconName)
     }
 }

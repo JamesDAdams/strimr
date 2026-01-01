@@ -280,6 +280,7 @@ struct MediaDetailHeaderSection: View {
                 .foregroundStyle(.primary)
                 .frame(maxWidth: 48)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
         }
     }
 
