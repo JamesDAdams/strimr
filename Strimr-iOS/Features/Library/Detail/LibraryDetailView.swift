@@ -62,13 +62,3 @@ enum LibraryDetailTab: String, CaseIterable, Identifiable {
         }
     }
 }
-
-#Preview {
-    NavigationStack {
-        LibraryDetailView(
-            library: Library(id: "1", title: "Movies", type: .movie),
-            onSelectMedia: { _ in }
-        )
-    }
-    .environment(PlexAPIContext())
-}

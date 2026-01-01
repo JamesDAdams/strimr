@@ -248,15 +248,3 @@ struct ProfileSwitcherView: View {
         isPinFieldFocused = false
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    let session = SessionManager(context: context)
-    NavigationStack {
-        ProfileSwitcherView(
-            viewModel: ProfileSwitcherViewModel(context: context, sessionManager: session)
-        )
-    }
-    .environment(context)
-    .environment(session)
-}

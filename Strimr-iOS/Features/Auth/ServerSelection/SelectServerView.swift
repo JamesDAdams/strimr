@@ -118,17 +118,3 @@ struct SelectServerView: View {
         return Text(connection.address)
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    let session = SessionManager(
-        context: context
-    )
-
-    return SelectServerView(
-        viewModel: ServerSelectionViewModel(
-            sessionManager: session,
-            context: context
-        )
-    )
-}

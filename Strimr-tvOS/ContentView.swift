@@ -44,11 +44,3 @@ struct ContentView: View {
         }
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    ContentView()
-        .environment(context)
-        .environment(SessionManager(context: context))
-        .environment(LibraryStore(context: context))
-}

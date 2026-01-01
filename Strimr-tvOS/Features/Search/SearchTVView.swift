@@ -111,11 +111,3 @@ struct SearchTVView: View {
         ]
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    return NavigationStack {
-        SearchTVView(viewModel: SearchViewModel(context: context))
-    }
-    .environment(context)
-}

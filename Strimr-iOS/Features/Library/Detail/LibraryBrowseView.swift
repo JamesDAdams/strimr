@@ -46,18 +46,3 @@ struct LibraryBrowseView: View {
         }
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    let viewModel = LibraryBrowseViewModel(
-        library: Library(id: "1", title: "Movies", type: .movie, sectionId: 1),
-        context: context
-    )
-    viewModel.items = []
-
-    return LibraryBrowseView(
-        viewModel: viewModel,
-        onSelectMedia: { _ in }
-    )
-    .environment(context)
-}

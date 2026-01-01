@@ -70,15 +70,3 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    let context = PlexAPIContext()
-    NavigationStack {
-        HomeView(
-            viewModel: HomeViewModel(
-                context: context,
-                settingsManager: SettingsManager(),
-                libraryStore: LibraryStore(context: context)
-            )
-        )
-    }
-}

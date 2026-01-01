@@ -64,20 +64,3 @@ struct LibraryRecommendedView: View {
         return landscapeHubIdentifiers.contains { identifier.contains($0) }
     }
 }
-
-#Preview {
-    let context = PlexAPIContext()
-    let viewModel = LibraryRecommendedViewModel(
-        library: Library(id: "1", title: "Movies", type: .movie, sectionId: 1),
-        context: context
-    )
-    viewModel.hubs = [
-        Hub(id: "continuewatching", title: "Continue Watching", items: []),
-    ]
-
-    return LibraryRecommendedView(
-        viewModel: viewModel,
-        onSelectMedia: { _ in }
-    )
-    .environment(context)
-}

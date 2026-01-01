@@ -327,15 +327,3 @@ struct ProfileSwitcherTVView: View {
     }
 }
 
-#Preview {
-    let context = PlexAPIContext()
-    let session = SessionManager(context: context)
-    return ProfileSwitcherTVView(
-        viewModel: ProfileSwitcherViewModel(
-            context: context,
-            sessionManager: session
-        )
-    )
-    .environment(context)
-    .environment(session)
-}
