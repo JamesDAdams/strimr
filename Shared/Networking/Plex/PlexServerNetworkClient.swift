@@ -10,7 +10,7 @@ final class PlexServerNetworkClient {
     init(authToken: String, baseURL: URL, clientIdentifier: String? = nil, language: String = "en") {
         self.authToken = authToken
         self.baseURL = baseURL
-        self.language = language
+        self.language = Locale.preferredLanguages.first ?? language
         self.clientIdentifier = clientIdentifier
     }
 
