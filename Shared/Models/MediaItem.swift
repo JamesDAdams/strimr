@@ -2,6 +2,7 @@ import Foundation
 
 struct MediaItem: Identifiable, Hashable {
     let id: String
+    let guid: String
     let summary: String?
     let title: String
     let type: PlexItemType
@@ -32,6 +33,10 @@ struct MediaItem: Identifiable, Hashable {
 
     var primaryLabel: String {
         grandparentTitle ?? parentTitle ?? title
+    }
+
+    var plexGuidID: String? {
+        guid.split(separator: "/").last.map(String.init)
     }
 
     var secondaryLabel: String? {

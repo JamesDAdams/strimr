@@ -4,6 +4,7 @@ extension MediaItem {
     init(plexItem: PlexItem) {
         self.init(
             id: plexItem.ratingKey,
+            guid: plexItem.guid,
             summary: plexItem.summary,
             title: plexItem.title,
             type: plexItem.type,

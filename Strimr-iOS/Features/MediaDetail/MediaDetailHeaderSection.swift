@@ -207,6 +207,10 @@ struct MediaDetailHeaderSection: View {
     private var secondaryButtonsRow: some View {
         HStack(spacing: 12) {
             watchToggleButton
+
+            if viewModel.shouldShowWatchlistButton {
+                watchlistToggleButton
+            }
         }
         .frame(maxWidth: .infinity, alignment: .center)
     }
@@ -276,6 +280,36 @@ struct MediaDetailHeaderSection: View {
             .disabled(viewModel.isLoading || viewModel.isUpdatingWatchStatus)
 
             Text(viewModel.watchActionTitle)
+                .font(.caption2)
+                .foregroundStyle(.primary)
+                .frame(maxWidth: 48)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+        }
+    }
+
+    private var watchlistToggleButton: some View {
+        VStack(spacing: 2) {
+            Button {
+                Task {
+                    await viewModel.toggleWatchlistStatus()
+                }
+            } label: {
+                if viewModel.isLoadingWatchlistStatus || viewModel.isUpdatingWatchlistStatus {
+                    ProgressView()
+                        .tint(.brandSecondaryForeground)
+                } else {
+                    Image(systemName: viewModel.watchlistActionIcon)
+                        .font(.headline.weight(.semibold))
+                }
+            }
+            .frame(width: 48, height: 44)
+            .buttonStyle(.bordered)
+            .controlSize(.regular)
+            .tint(.brandSecondary)
+            .disabled(viewModel.isLoading || viewModel.isLoadingWatchlistStatus || viewModel.isUpdatingWatchlistStatus)
+
+            Text(viewModel.watchlistActionTitle)
                 .font(.caption2)
                 .foregroundStyle(.primary)
                 .frame(maxWidth: 48)

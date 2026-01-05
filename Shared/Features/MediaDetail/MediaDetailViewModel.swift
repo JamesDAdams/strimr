@@ -26,6 +26,9 @@ final class MediaDetailViewModel {
     var relatedHubsErrorMessage: String?
     private var updatingWatchStatusIds: Set<String> = []
     var watchActionErrorMessage: String?
+    var isLoadingWatchlistStatus = false
+    var isUpdatingWatchlistStatus = false
+    private var isWatchlisted = false
 
     init(media: MediaItem, context: PlexAPIContext) {
         self.media = media
@@ -63,6 +66,7 @@ final class MediaDetailViewModel {
                 resolveGradient()
             }
             onDeckItem = response.mediaContainer.metadata?.first?.onDeck?.metadata.map { MediaItem(plexItem: $0) }
+            await loadWatchlistStatus()
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -119,6 +123,25 @@ final class MediaDetailViewModel {
         }
     }
 
+    func toggleWatchlistStatus() async {
+        guard let discoverID = media.plexGuidID else { return }
+        guard !isUpdatingWatchlistStatus else { return }
+        guard let repository = try? DiscoverWatchlistRepository(context: context) else { return }
+
+        isUpdatingWatchlistStatus = true
+        defer { isUpdatingWatchlistStatus = false }
+
+        do {
+            if isWatchlisted {
+                try await repository.removeFromWatchlist(ratingKey: discoverID)
+            } else {
+                try await repository.addToWatchlist(ratingKey: discoverID)
+            }
+            await loadWatchlistStatus()
+        } catch {
+        }
+    }
+
     func imageURL(for media: MediaItem, width: Int = 320, height: Int = 180) -> URL? {
         guard let imageRepository = try? ImageRepository(context: context) else { return nil }
 
@@ -142,6 +165,34 @@ final class MediaDetailViewModel {
 
     private func resolveGradient() {
         backdropGradient = MediaBackdropGradient.colors(for: media)
+    }
+
+    private func loadWatchlistStatus() async {
+        guard [.movie, .show].contains(media.type) else {
+            isWatchlisted = false
+            return
+        }
+
+        guard let discoverID = media.plexGuidID else {
+            isWatchlisted = false
+            return
+        }
+
+        guard let repository = try? DiscoverWatchlistRepository(context: context) else {
+            isWatchlisted = false
+            return
+        }
+
+        isLoadingWatchlistStatus = true
+        defer { isLoadingWatchlistStatus = false }
+
+        do {
+            let response = try await repository.getUserState(discoverID: discoverID)
+            let userState = response.mediaContainer.userState?.first
+            isWatchlisted = userState?.watchlistedAt != nil
+        } catch {
+            isWatchlisted = false
+        }
     }
 
     var runtimeText: String? {
@@ -260,6 +311,21 @@ final class MediaDetailViewModel {
 
     var watchActionIcon: String {
         watchActionIcon(for: media)
+    }
+
+    var watchlistActionTitle: String {
+        isWatchlisted
+            ? String(localized: "media.detail.watchlist.remove")
+            : String(localized: "media.detail.watchlist.add")
+    }
+
+    var watchlistActionIcon: String {
+        isWatchlisted ? "bookmark.fill" : "bookmark"
+    }
+
+    var shouldShowWatchlistButton: Bool {
+        [.movie, .show].contains(media.type)
+            && media.plexGuidID != nil
     }
 
     var isUpdatingWatchStatus: Bool {

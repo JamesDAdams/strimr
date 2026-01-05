@@ -98,6 +98,10 @@ struct MediaDetailTVView: View {
             }
             
             watchToggleButton
+
+            if viewModel.shouldShowWatchlistButton {
+                watchlistToggleButton
+            }
         }
     }
 
@@ -131,6 +135,27 @@ struct MediaDetailTVView: View {
         .controlSize(.regular)
         .tint(.secondary)
         .disabled(viewModel.isLoading || viewModel.isUpdatingWatchStatus)
+    }
+
+    private var watchlistToggleButton: some View {
+        Button {
+            Task {
+                await viewModel.toggleWatchlistStatus()
+            }
+        } label: {
+            if viewModel.isLoadingWatchlistStatus || viewModel.isUpdatingWatchlistStatus {
+                ProgressView()
+                    .tint(.brandSecondaryForeground)
+            } else {
+                Image(systemName: viewModel.watchlistActionIcon)
+                    .font(.title2.weight(.semibold))
+            }
+        }
+        .buttonStyle(.bordered)
+        .controlSize(.regular)
+        .tint(.secondary)
+        .disabled(viewModel.isLoading || viewModel.isLoadingWatchlistStatus || viewModel.isUpdatingWatchlistStatus)
+        .accessibilityLabel(Text(viewModel.watchlistActionTitle))
     }
 
     private var seasonsSection: some View {
