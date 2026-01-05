@@ -10,6 +10,7 @@ final class PlexAPIContext {
 
     @ObservationIgnored private let keychain = Keychain(service: "dev.strimr.app")
     @ObservationIgnored private let clientIdKey = "strimr.plex.clientId"
+    @ObservationIgnored private let connectionKeyPrefix = "strimr.plex.connection"
 
     init() {
         Task {
@@ -62,11 +63,19 @@ final class PlexAPIContext {
             return baseURLServer
         }
 
+        if let savedConnection = loadSavedConnection(for: resource),
+           let matchingConnection = resource.connections.first(where: { $0.uri == savedConnection }),
+           try await isConnectionReachable(matchingConnection, accessToken: resource.accessToken) {
+            baseURLServer = matchingConnection.uri
+            return matchingConnection.uri
+        }
+
         guard let connection = try await resolveConnection(using: resource) else {
             throw PlexAPIError.unreachableServer
         }
 
         baseURLServer = connection.uri
+        storeConnection(connection.uri, for: resource)
         return connection.uri
     }
 
@@ -110,5 +119,28 @@ final class PlexAPIContext {
         resource = nil
         authTokenCloud = nil
         baseURLServer = nil
+    }
+
+    private func connectionKey(for resource: PlexCloudResource) -> String {
+        "\(connectionKeyPrefix).\(resource.clientIdentifier)"
+    }
+
+    private func loadSavedConnection(for resource: PlexCloudResource) -> URL? {
+        do {
+            guard let value = try keychain.string(forKey: connectionKey(for: resource)) else {
+                return nil
+            }
+            return URL(string: value)
+        } catch {
+            return nil
+        }
+    }
+
+    private func storeConnection(_ url: URL, for resource: PlexCloudResource) {
+        do {
+            try keychain.setString(url.absoluteString, forKey: connectionKey(for: resource))
+        } catch {
+            return
+        }
     }
 }
