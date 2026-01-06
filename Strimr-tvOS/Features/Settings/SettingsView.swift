@@ -43,7 +43,7 @@ struct SettingsView: View {
 
                 Picker("settings.playback.player", selection: playerSelectionBinding) {
                     ForEach(viewModel.playerOptions) { player in
-                        Text(player.localizationKey).tag(player)
+                        Text(LocalizedStringKey(player.localizationKey)).tag(player)
                     }
                 }
                 .pickerStyle(.navigationLink)
