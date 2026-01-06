@@ -147,6 +147,13 @@
 			);
 			target = E9C448F22EF3034900D2895B /* Strimr-tvOS */;
 		};
+		E9E70EF12F0D6FDB009C62B3 /* Exceptions for "Config" folder in "Strimr-tvOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Config-tvOS.xcconfig",
+			);
+			target = E9C448F22EF3034900D2895B /* Strimr-tvOS */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -174,6 +181,14 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		E9E70EF02F0D6FD7009C62B3 /* Config */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E9E70EF12F0D6FDB009C62B3 /* Exceptions for "Config" folder in "Strimr-tvOS" target */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +214,7 @@
 		E98A13B02ED8CBAD002F98B2 = {
 			isa = PBXGroup;
 			children = (
+				E9E70EF02F0D6FD7009C62B3 /* Config */,
 				E97F3FC22ED9E12000CA6E05 /* Localizable.xcstrings */,
 				E9C449012EF30A9500D2895B /* Shared */,
 				E98A13BB2ED8CBAD002F98B2 /* Strimr-iOS */,
@@ -245,6 +261,7 @@
 			fileSystemSynchronizedGroups = (
 				E98A13BB2ED8CBAD002F98B2 /* Strimr-iOS */,
 				E9C449012EF30A9500D2895B /* Shared */,
+				E9E70EF02F0D6FD7009C62B3 /* Config */,
 			);
 			name = "Strimr-iOS";
 			packageProductDependencies = (
@@ -474,12 +491,13 @@
 		};
 		E98A13C52ED8CBAE002F98B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = E9E70EF02F0D6FD7009C62B3 /* Config */;
+			baseConfigurationReferenceRelativePath = "Config-iOS.xcconfig";
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BK9TPF9L3H;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -501,7 +519,6 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.wunax.strimr.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -520,12 +537,13 @@
 		};
 		E98A13C62ED8CBAE002F98B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = E9E70EF02F0D6FD7009C62B3 /* Config */;
+			baseConfigurationReferenceRelativePath = "Config-iOS.xcconfig";
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BK9TPF9L3H;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
@@ -547,7 +565,6 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.wunax.strimr.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -566,12 +583,13 @@
 		};
 		E9C448FC2EF3034900D2895B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = E9E70EF02F0D6FD7009C62B3 /* Config */;
+			baseConfigurationReferenceRelativePath = "Config-tvOS.xcconfig";
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BK9TPF9L3H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Strimr-tvOS/Info.plist";
@@ -583,7 +601,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.wunax.strimr.tvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -599,12 +616,13 @@
 		};
 		E9C448FD2EF3034900D2895B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = E9E70EF02F0D6FD7009C62B3 /* Config */;
+			baseConfigurationReferenceRelativePath = "Config-tvOS.xcconfig";
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = BK9TPF9L3H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Strimr-tvOS/Info.plist";
@@ -616,7 +634,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.wunax.strimr.tvos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
