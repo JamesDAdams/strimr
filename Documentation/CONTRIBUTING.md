@@ -19,14 +19,13 @@ Before reporting a bug, please check that it does not already exist.
    carthage bootstrap --use-xcframeworks --platform iOS,tvOS
    ```
 
-3. Create your local config files in `Config/`:
+3. Create your local config file in `Config/`:
 
    ```sh
-   cp Config/Config-example.xcconfig Config/Config-iOS.xcconfig
-   cp Config/Config-example.xcconfig Config/Config-tvOS.xcconfig
+   cp Config/Config-example.xcconfig Config/Config.xcconfig
    ```
-   
-   Update `DEVELOPMENT_TEAM` and `PRODUCT_BUNDLE_IDENTIFIER` for each target.
+
+   Update `DEVELOPMENT_TEAM` and `PRODUCT_BUNDLE_IDENTIFIER`.
 
 4. Open `Strimr.xcworkspace` in Xcode.
 
