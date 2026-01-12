@@ -63,6 +63,3 @@ Strimr is a third-party Plex client built in Swift with a native interface for i
     <img src="Screenshots/appletv/appletv_player.jpg" alt="Apple TV Player" width="360" />
   </p>
 </details>
-
-## Contributing
-See [Documentation/CONTRIBUTING.md](Documentation/CONTRIBUTING.md).
