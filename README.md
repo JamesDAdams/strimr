@@ -17,6 +17,16 @@ Strimr is a third-party Plex client built in Swift with a native interface for i
 - Resume playback
 - Skip intro and credits
 
+## Download
+<p align="center">
+  <a href="https://apps.apple.com/us/app/strimr/id6757491271">
+    <img src=".github/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg" alt="Download on the App Store" width="200" />
+  </a>
+  <a href="https://apps.apple.com/us/app/strimr/id6757491271">
+    <img src=".github/assets/Download_on_Apple_TV_Badge_US-UK_RGB_blk_092917.svg" alt="Download on Apple TV" width="200" />
+  </a>
+</p>
+
 ## Screenshots
 <details>
   <summary>iPhone</summary>
