@@ -1,21 +1,23 @@
 # Privacy Policy
 
-Effective date: 9 January 2026
+Effective date: 16 January 2026
 
 This Privacy Policy explains how Strimr ("Strimr", "we", "us", or "our") handles information when you use the Strimr mobile application (the "App"). Strimr is a third-party client for Plex and is not affiliated with Plex, Inc.
 
 ## Summary
 
-- Strimr does not collect, transmit, sell, or share any personal data.
+- Strimr only collects crash diagnostics to improve app stability (via Sentry).
 - All information used by the App remains on your device.
 - The App communicates with Plex services to function; Plex's handling of data is governed by Plex's privacy policy.
 
-## Information We Do Not Collect
+## Information We Collect
+
+We collect only anonymized crash diagnostics through Sentry when the App crashes. This data is used to identify and fix stability issues.
 
 We do not collect or process:
 
 - Personal identifiers (such as name, email address, or account ID)
-- Usage analytics or diagnostics
+- Usage analytics (non-crash)
 - Location data
 - Contacts, photos, or other device data
 
